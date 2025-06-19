@@ -11,7 +11,7 @@ Pega specialisten voor te bereiden op een Pega + React workshop.
 
 De slides worden op github pages gehost.
 
-[Open Slides](https://wimbarelds.github.io/pega-react-training/)
+[Open Slides](https://wimbarelds.github.io/react-workshop/)
 
 ## Slides setup
 
