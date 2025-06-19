@@ -1,0 +1,20 @@
+@import 'tailwindcss';
+@plugin "@tailwindcss/typography";
+@import './sopra-gradient.css';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  button,
+  summary {
+    @apply cursor-pointer;
+  }
+}
+
+@layer components {
+  .styled-scrollbar {
+    scrollbar-color: --alpha(var(--color-slate-50) / 75%) transparent;
+    scrollbar-gutter: stable;
+    scrollbar-width: thin;
+  }
+}
