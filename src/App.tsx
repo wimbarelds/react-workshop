@@ -7,10 +7,13 @@ export function App() {
 
   return (
     <>
-      <div className="fixed h-full bg-slate-950/75 w-6xl max-w-full left-1/2 -translate-x-1/2" />
-      <div className="z-10 max-w-6xl p-12 pt-16 w-full mx-auto">
+      <div
+        className="fixed h-full bg-black/75 w-6xl max-w-full left-1/2 -translate-x-1/2"
+        data-background
+      />
+      <main className="z-10 max-w-6xl p-12 pt-16 w-full mx-auto">
         <Slide />
-      </div>
+      </main>
       <Nav />
     </>
   );

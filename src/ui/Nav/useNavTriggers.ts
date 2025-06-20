@@ -12,4 +12,13 @@ export function useNavTriggers() {
     window.addEventListener('keydown', listener);
     return () => window.removeEventListener('keydown', listener);
   }, [nextSlide, prevSlide]);
+
+  useEffect(() => {
+    const onClick = (e: MouseEvent) => {
+      if (e.target instanceof HTMLElement && e.target.closest('main, [data-background]')) return;
+      nextSlide();
+    };
+    window.addEventListener('click', onClick);
+    return () => window.removeEventListener('click', onClick);
+  }, [nextSlide]);
 }
