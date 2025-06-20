@@ -16,9 +16,10 @@ export function useNavTriggers() {
   useEffect(() => {
     const onClick = (e: MouseEvent) => {
       if (e.target instanceof HTMLElement && e.target.closest('main, [data-background]')) return;
-      nextSlide();
+      if (e.pageX > window.innerWidth / 2) nextSlide();
+      else prevSlide();
     };
     window.addEventListener('click', onClick);
     return () => window.removeEventListener('click', onClick);
-  }, [nextSlide]);
+  }, [prevSlide, nextSlide]);
 }

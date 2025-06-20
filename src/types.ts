@@ -11,7 +11,7 @@ export interface Slide {
 }
 
 export interface Topic {
-  title: ReactNode;
+  title: string;
   slides: Slide[];
 }
 

@@ -19,6 +19,7 @@ export function QuickBar({ open, setOpen }: BarProps) {
       className={cn('flex items-center justify-between *:pointer-events-auto transition-all', {
         '-translate-y-full opacity-0 *:pointer-events-none': open,
       })}
+      inert={open}
     >
       <ArrowButton
         className="pr-0.5"
