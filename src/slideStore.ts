@@ -1,107 +1,7 @@
 import { create } from 'zustand';
 
-import type { Slide, SlideComponent, Slides } from './types';
-import { Welkom } from './slides/01/Welkom';
-import { type ReactNode } from 'react';
-
-const slides: Slides = [];
-const addTopic = (title: string, content: Slide | Slide[]) => {
-  if (Array.isArray(content)) slides.push({ title, slides: content });
-  else slides.push({ title, slides: [content] });
-};
-
-const Placeholder = () => 'Placeholder';
-const slide = (
-  preview: ReactNode,
-  duration: number,
-  component: SlideComponent = Placeholder,
-): Slide => ({
-  preview,
-  duration,
-  view: component,
-  type: 'slide',
-});
-
-const assignment = (
-  preview: ReactNode,
-  duration: number,
-  component: SlideComponent = Placeholder,
-): Slide => ({
-  ...slide(preview, duration, component),
-  type: 'assignment',
-});
-
-addTopic('Welkom & Intro', [
-  slide('Welkom', 1, Welkom),
-  slide('Goals', 2),
-  slide('Agenda', 3),
-  slide('Wel/niet in scope', 4),
-]);
-
-addTopic('Get ready with me?', [
-  slide('Uitleg & Voorbeeld', 3),
-  assignment('Setup', 10),
-  slide('Uitleg bestanden', 2),
-]);
-
-addTopic('Wat is React', [slide('f(x) = UI', 4), slide('Componenten', 6)]);
-
-addTopic('Componenten & JSX', [
-  slide('JSX', 5),
-  slide('Component', 5),
-  slide('Component in JSX', 5),
-  assignment('Hello World', 5),
-]);
-
-addTopic('Props & Children', [
-  slide('Props', 4),
-  slide('children', 4),
-  assignment('Statische takenlijst', 7),
-]);
-
-addTopic('Javascript in JSX', [
-  slide('Voorwaarden & Lijsten', 5),
-  assignment('Maak een lijst', 5),
-  assignment('Verberg afgerond', 5),
-]);
-
-addTopic('Hooks', [
-  slide('Hooks algemeen', 2),
-  slide('useState', 5),
-  assignment('Toggle show/hide', 8),
-  slide('Pizza break!', 40),
-  assignment('Lijst in state', 5),
-  slide('Event handling', 5),
-  assignment('Nieuwe taak toevoegen', 10),
-  slide('Functie als prop', 5),
-  assignment('Zet taak op afgerond', 10),
-]);
-
-addTopic('useEffect', [
-  slide('Wat is een effect?', 3),
-  slide('Effect bij mounten', 2),
-  assignment('Alert als alles afgerond', 10),
-]);
-
-addTopic('Data laden', [slide('Data ophalen met fetch', 5), assignment('Laad taken', 10)]);
-
-addTopic('Component Library (MUI)', [
-  slide('Wat zijn component libraries?', 2),
-  slide('Wat is MUI?', 3),
-  assignment('Installeer MUI', 5),
-  assignment('Gebruik Card', 3),
-  assignment('Gebruik List', 5),
-  assignment('Gebruik Button', 2),
-]);
-
-addTopic('Q & A', [slide('Vragen?', 10)]);
-
-addTopic('Bonus content', [
-  slide('More hooks', 0),
-  slide('Routing', 0),
-  slide('Under the hood', 0),
-  slide('React query', 0),
-]);
+import { useMemo } from 'react';
+import { slides } from './slides/slides';
 
 interface SlideStore {
   topicIndex: number;
@@ -146,6 +46,13 @@ export const useSlideNav = () => {
   const prevSlide = () => changeSlide(-1);
   return { nextSlide, prevSlide };
 };
+
+export const useTopics = () =>
+  useMemo(() => {
+    return slides.map((topic): [string, number] => {
+      return [topic.title, topic.slides.reduce((sum, cur) => sum + cur.duration, 0)];
+    });
+  }, []);
 
 export const useHasPrevSlide = () =>
   useStore(({ slideIndex, topicIndex }) => Boolean(topicIndex || slideIndex));

@@ -18,6 +18,12 @@ module.exports = {
             'a:hover': {
               color: 'var(--color-red-500)',
             },
+            'code::before': {
+              content: 'none',
+            },
+            'code::after': {
+              content: 'none',
+            },
           },
         },
       }),

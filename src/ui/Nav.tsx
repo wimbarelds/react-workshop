@@ -9,6 +9,7 @@ export function Nav() {
 
   const bgClick = (e: React.MouseEvent) => {
     e.stopPropagation();
+    if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
     setOpen(false);
   };
 

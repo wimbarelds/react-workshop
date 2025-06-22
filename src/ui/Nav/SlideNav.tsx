@@ -60,6 +60,9 @@ export function SlideNav({ open, setOpen }: SlideNavProps) {
                     <button
                       onClick={() => {
                         setSlideIndeces(topicIndex, slideIndex);
+                        if (document.activeElement instanceof HTMLElement) {
+                          document.activeElement.blur();
+                        }
                         setOpen(false);
                       }}
                       className={cn(

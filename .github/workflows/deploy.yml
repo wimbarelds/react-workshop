@@ -36,6 +36,7 @@ jobs:
 
       - name: Build
         run: pnpm run build
+        run: cp dist/index.html dist/404.html
 
       - name: Upload pages artifact
         uses: actions/upload-pages-artifact@v3
