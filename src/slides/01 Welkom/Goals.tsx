@@ -3,10 +3,12 @@ import { Prose } from '../../shared/Prose';
 export function Goals() {
   return (
     <Prose>
-      <h1>Workshopdoelen</h1>
+      <h1>Over de workshop</h1>
       <ol>
         <li>Deze workshop is primair opgezet als voorbereiding op de Pega + React workshop.</li>
-        <li>Maar deze workshop zelf dekt puur en alleen React.</li>
+        <li>
+          <em>Maar</em> deze workshop zelf dekt puur en alleen React.
+        </li>
       </ol>
 
       <h2>Wat jullie straks kunnen en weten</h2>

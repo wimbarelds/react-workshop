@@ -19,6 +19,9 @@ export function Welkom() {
           {url}
         </a>
       </p>
+      <p>
+        <em>Open de slides ook even lokaal zodat je later wat kan copy-pasten.</em>
+      </p>
     </Prose>
   );
 }

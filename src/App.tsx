@@ -1,3 +1,4 @@
+import { cn } from './shared/cn';
 import { useSlide } from './slideStore';
 import { Nav } from './ui/Nav';
 
@@ -8,10 +9,10 @@ export function App() {
   return (
     <>
       <div
-        className="fixed h-full bg-black/50 w-6xl max-w-full left-1/2 -translate-x-1/2"
+        className={cn('fixed h-full bg-black/50 w-6xl max-w-full left-1/2 -translate-x-1/2')}
         data-background
       />
-      <main className="z-10 max-w-6xl p-12 pt-16 w-full mx-auto">
+      <main className={cn('z-10 max-w-6xl p-12 pt-16 w-full mx-auto')} data-slide={slide.type}>
         <Slide />
       </main>
       <Nav />

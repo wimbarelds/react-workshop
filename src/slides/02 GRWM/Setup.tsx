@@ -20,18 +20,18 @@ export function Setup() {
               <code>ctrl + `</code>
             </button>
           </li>
-          <li>Go to directory where you keep your projects</li>
+          <li>Ga naar de directory waar je een project wil maken</li>
           <li>
             Run command:{' '}
             <code className="px-2 py-1 bg-gray-950 rounded-lg">npm create vite@latest</code>
           </li>
-          <li>Follow instructions in terminal</li>
+          <li>Volg de instructies in de terminal</li>
           <li>
-            <div>Once the terminal script is done</div>
+            <div>Als het create script in de terminal klaar is</div>
             <ul>
               <li>Open the project-directory in VSCode</li>
               <li>
-                Open the terminal again
+                Open de terminal in VSCode
                 <button
                   className="ml-2 rounded-sm outline inline-block leading-[1.2em] px-2 py-1/2 hover:bg-white/10"
                   onClick={() => setShowKeyboard(true)}
@@ -40,7 +40,7 @@ export function Setup() {
                 </button>
               </li>
               <li>
-                Make sure your project runs, run command:{' '}
+                Controleer de het gemaakte project werkt, run command:{' '}
                 <code className="px-2 py-1 bg-gray-950 rounded-lg">npm run dev</code>
               </li>
             </ul>

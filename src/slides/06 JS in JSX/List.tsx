@@ -5,11 +5,12 @@ import exampleList from './examples/ExampleList.jsx?raw';
 export function Lists() {
   return (
     <Prose>
-      <h1>Rendering lists</h1>
-      <p>The next assignment is to make your list based on data.</p>
-      <p>Store a few list items in a variable, and render them.</p>
-      <p>Example of what your list might look like:</p>
+      <h1>Een lijst renderen</h1>
+      <p>De voglende taak is om je takenlijst te maken op basis van data.</p>
+      <p>Sla een aantal taak-items op in een variable, en render die lijst</p>
+      <p>Voorbeeld van hoe je lijst er uit zou kunnen zien:</p>
       <Code code={exampleList} />
+      <p>(Copy paste gerust)</p>
     </Prose>
   );
 }

@@ -58,10 +58,10 @@ const assignment = (preview: ReactNode, duration: number, component: SlideCompon
 });
 
 addTopic('Welkom & Intro', [
-  slide('Welkom', 1, Welkom),
-  slide('Goals', 2, Goals),
-  slide('Agenda', 3, Agenda),
-  slide('Wel/niet in scope', 4, InScope),
+  slide('Welkom', 3, Welkom),
+  slide('Goals', 3, Goals),
+  slide('Agenda', 1, Agenda),
+  slide('Wel/niet in scope', 3, InScope),
 ]);
 
 addTopic('Get ready with me?', [
@@ -93,23 +93,23 @@ addTopic('Javascript in JSX', [
 addTopic('Pizza!', [slide(<PizzaPreview />, 40, Pizza)]);
 
 addTopic('Hooks', [
-  slide('Hooks algemeen', 2, Hooks),
+  slide('Hooks algemeen', 3, Hooks),
   slide('useState', 10, UseState),
-  assignment('Toggle show/hide', 8, ToggleHideDone),
+  assignment('Toggle show/hide', 7, ToggleHideDone),
   assignment('Nieuwe taak toevoegen', 15, AddTask),
   assignment('Zet taak op afgerond', 15, MarkAsDone),
-  slide('Wat is een effect?', 3, WhatAreEffects),
+  slide('Wat is een effect?', 5, WhatAreEffects),
   assignment('Alert als alles afgerond', 10, WhenAllDone),
 ]);
 
 addTopic('Data laden', [
   slide('Data voorbereiden', 5, PrepareDataLoading),
-  assignment('Data ophalen met fetch', 5, DataLoading),
+  assignment('Data ophalen met fetch', 10, DataLoading),
 ]);
 
 addTopic('Component Library (MUI)', [
-  slide('Wat zijn component libraries?', 2, WhatLibs),
-  assignment('Installeer MUI', 5, InstallMui),
+  slide('Wat zijn component libraries?', 5, WhatLibs),
+  assignment('Installeer MUI', 10, InstallMui),
   assignment('Gebruik Card', 3, UsingCard),
   assignment('Gebruik List', 5, UsingList),
   assignment('Gebruik Button', 2, UsingButton),

@@ -10,6 +10,11 @@
   summary {
     @apply cursor-pointer;
   }
+
+  [data-slide='assignment'] h1::before {
+    @apply text-gray-400;
+    content: 'Opdracht: ';
+  }
 }
 
 @layer components {
