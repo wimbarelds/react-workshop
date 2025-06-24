@@ -27,7 +27,6 @@ import { MarkAsDone } from './08 Hooks/MarkAsDone';
 import { WhatAreEffects } from './08 Hooks/WhatAreEffects';
 import { WhenAllDone } from './08 Hooks/WhenAllDone';
 import { DataLoading } from './09 Fetch/DataLoading';
-import { FetchTasks } from './09 Fetch/FetchTasks';
 import { WhatLibs } from './10 Libs/WhatLibs';
 import { InstallMui } from './10 Libs/InstallMui';
 import { UsingCard } from './10 Libs/UsingCard';
@@ -38,6 +37,7 @@ import { MoreHooks } from './12 Bonus/MoreHooks';
 import { Routing } from './12 Bonus/Routing';
 import { UnderTheHood } from './12 Bonus/UnderTheHood';
 import { ReactQuery } from './12 Bonus/ReactQuery';
+import { PrepareDataLoading } from './09 Fetch/Prep';
 
 export const slides: Slides = [];
 const addTopic = (title: string, content: Slide | Slide[]) => {
@@ -103,8 +103,8 @@ addTopic('Hooks', [
 ]);
 
 addTopic('Data laden', [
-  slide('Data ophalen met fetch', 5, DataLoading),
-  assignment('Laad taken', 10, FetchTasks),
+  slide('Data voorbereiden', 5, PrepareDataLoading),
+  assignment('Data ophalen met fetch', 5, DataLoading),
 ]);
 
 addTopic('Component Library (MUI)', [
@@ -120,6 +120,6 @@ addTopic('Q & A', [slide('Vragen?', 10, QnA)]);
 addTopic('Bonus content', [
   assignment('More hooks', 0, MoreHooks),
   assignment('Routing', 0, Routing),
-  assignment('Under the hood', 0, UnderTheHood),
+  slide('Under the hood', 0, UnderTheHood),
   assignment('React query', 0, ReactQuery),
 ]);

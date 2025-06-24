@@ -1,4 +1,7 @@
+import Code from '../../shared/Code';
 import { Prose } from '../../shared/Prose';
+
+import effectExample from './examples/ExampleEffect.jsx?raw';
 
 export function WhatAreEffects() {
   return (
@@ -15,6 +18,25 @@ export function WhatAreEffects() {
         bij VueJS <code>onMounted</code>, <code>onChange</code>. In React hebben we hier een iets
         abstractere versie van.
       </p>
+      <Code code={effectExample} />
+      <h2>Uitleg</h2>
+      <p>
+        <code>useEffect</code> heeft 2 parameters:
+      </p>
+      <ol>
+        <li>De callback functie</li>
+        <li>De dependency array</li>
+      </ol>
+      <p>De dependency array bepaalt wanneer de callback wordt uitgevoerd.</p>
+      <ul>
+        <li>
+          De callback wordt altijd direct een keer uitgevoerd zodra het component gerenderd is.
+        </li>
+        <li>
+          Ook wordt de callback opnieuw uitgevoerd als een van de items uit de dependency array
+          verandert.
+        </li>
+      </ul>
     </Prose>
   );
 }
