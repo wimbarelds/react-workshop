@@ -16,6 +16,7 @@ export function useNavTriggers() {
   useEffect(() => {
     const onClick = (e: MouseEvent) => {
       if (e.target instanceof HTMLElement && e.target.closest('main, [data-background]')) return;
+      e.preventDefault();
       if (e.pageX > window.innerWidth / 2) nextSlide();
       else prevSlide();
     };

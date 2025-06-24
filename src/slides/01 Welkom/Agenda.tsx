@@ -3,6 +3,7 @@ import { Prose } from '../../shared/Prose';
 import { useTopics } from '../../slideStore';
 import { Arrow } from '../../svg/Arrow';
 import { Checkbox } from '../../shared/Checkbox';
+import { PizzaPreview } from '../07 Pizza/Pizza';
 
 function formatTime(date: Date) {
   return `${date.getHours()}:${date.getMinutes().toString().padStart(2, '0')}`;
@@ -46,7 +47,7 @@ export function Agenda() {
             if (!showTimes)
               return (
                 <li key={topic}>
-                  {duration} min - <strong>{topic}</strong>{' '}
+                  {duration} min - <strong>{topic === 'Pizza!' ? <PizzaPreview /> : topic}</strong>{' '}
                   {index === 0 && (
                     <div className="inline-flex gap-1 ml-2 items-baseline text-sm text-white/75">
                       <Arrow className="-rotate-90" width={9} height={6} thickness={2} py={2} /> You
@@ -61,7 +62,7 @@ export function Agenda() {
                 <span className="font-mono">
                   {from} - {to}
                 </span>{' '}
-                - <strong>{topic}</strong>
+                - <strong>{topic === 'Pizza!' ? <PizzaPreview /> : topic}</strong>
               </li>
             );
           })}

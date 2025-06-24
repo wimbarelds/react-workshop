@@ -18,16 +18,14 @@ import { TaskList } from './05 Props/TaskList';
 import { JsInJSX } from './06 JS in JSX/JsInJsx';
 import { Lists } from './06 JS in JSX/List';
 import { HideIfDone } from './06 JS in JSX/HideIfDone';
-import { Hooks } from './07 Hooks/Algemeen';
-import { UseState } from './07 Hooks/UseState';
-import { ToggleHideDone } from './07 Hooks/ToggleHideDone';
-import { Pizza } from './07 Hooks/Pizza';
-import { EventHandling } from './07 Hooks/EventHandling';
-import { AddTask } from './07 Hooks/AddTask';
-import { FunctionsAsProps } from './07 Hooks/FunctionProps';
-import { MarkAsDone } from './07 Hooks/MarkAsDone';
-import { WhatAreEffects } from './08 Effect/WhatAreEffects';
-import { WhenAllDone } from './08 Effect/WhenAllDone';
+import { Hooks } from './08 Hooks/Algemeen';
+import { UseState } from './08 Hooks/UseState';
+import { ToggleHideDone } from './08 Hooks/ToggleHideDone';
+import { Pizza, PizzaPreview } from './07 Pizza/Pizza';
+import { AddTask } from './08 Hooks/AddTask';
+import { MarkAsDone } from './08 Hooks/MarkAsDone';
+import { WhatAreEffects } from './08 Hooks/WhatAreEffects';
+import { WhenAllDone } from './08 Hooks/WhenAllDone';
 import { DataLoading } from './09 Fetch/DataLoading';
 import { FetchTasks } from './09 Fetch/FetchTasks';
 import { WhatLibs } from './10 Libs/WhatLibs';
@@ -92,18 +90,14 @@ addTopic('Javascript in JSX', [
   assignment('Hide if Done', 5, HideIfDone),
 ]);
 
-addTopic('Hooks & Pizza', [
-  slide('Hooks algemeen', 2, Hooks),
-  slide('useState', 5, UseState),
-  assignment('Toggle show/hide', 8, ToggleHideDone),
-  slide('🍕 Pizza break!', 40, Pizza),
-  slide('Event handling', 5, EventHandling),
-  assignment('Nieuwe taak toevoegen', 15, AddTask),
-  slide('Functie als prop', 5, FunctionsAsProps),
-  assignment('Zet taak op afgerond', 10, MarkAsDone),
-]);
+addTopic('Pizza!', [slide(<PizzaPreview />, 40, Pizza)]);
 
-addTopic('useEffect', [
+addTopic('Hooks', [
+  slide('Hooks algemeen', 2, Hooks),
+  slide('useState', 10, UseState),
+  assignment('Toggle show/hide', 8, ToggleHideDone),
+  assignment('Nieuwe taak toevoegen', 15, AddTask),
+  assignment('Zet taak op afgerond', 15, MarkAsDone),
   slide('Wat is een effect?', 3, WhatAreEffects),
   assignment('Alert als alles afgerond', 10, WhenAllDone),
 ]);
