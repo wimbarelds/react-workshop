@@ -29,7 +29,7 @@ export function Setup() {
           <li>
             <div>Als het create script in de terminal klaar is</div>
             <ul>
-              <li>Open the project-directory in VSCode</li>
+              <li>Open de project-directory in VSCode</li>
               <li>
                 Open de terminal in VSCode
                 <button
@@ -40,7 +40,11 @@ export function Setup() {
                 </button>
               </li>
               <li>
-                Controleer de het gemaakte project werkt, run command:{' '}
+                Installeer de dependencies, run command:{' '}
+                <code className="px-2 py-1 bg-gray-950 rounded-lg">npm install</code>
+              </li>
+              <li>
+                Controleer of het gemaakte project werkt, run command:{' '}
                 <code className="px-2 py-1 bg-gray-950 rounded-lg">npm run dev</code>
               </li>
             </ul>
