@@ -9,7 +9,7 @@ export function HelloWorld() {
         <li>
           Maak een bestand <code>"HelloWorld.tsx"</code> in je <code>src</code> directory.
         </li>
-        <li>Voeg je eerste component to in dat bestand. (vergeet hem niet te exporteren!)</li>
+        <li>Voeg je eerste component toe in dat bestand. (vergeet hem niet te exporteren!)</li>
         <li>
           Importeer en gebruik jouw component in <code>"src/App.tsx"</code>.
         </li>

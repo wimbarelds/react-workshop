@@ -9,7 +9,7 @@ export function UsingCard() {
       <h1>
         Using <code>{'<Card>'}</code>
       </h1>
-      <p>Nou MUI geinstalleerd is kunnen we MUI componenten gebruiken.</p>
+      <p>Nu MUI geinstalleerd is kunnen we MUI componenten gebruiken.</p>
       <p>
         De eerste die we gaan gebruiken is het{' '}
         <a href="https://mui.com/material-ui/react-card/" target="_blank">

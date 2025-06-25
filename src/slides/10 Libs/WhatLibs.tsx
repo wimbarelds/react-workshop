@@ -6,7 +6,7 @@ export function WhatLibs() {
       <h1>Component Library</h1>
       <p>
         In frontend-development wordt veel gebruikt van libraries. React zelf is ook een library, en
-        Pega's <code>{'@pega/react-sdk=components'}</code> is ook een library.
+        Pega's <code>{'@pega/react-sdk-components'}</code> is ook een library.
       </p>
       <p>
         Die libraries gebruiken dan bijna altijd ook weer andere libraries. Pega's SDK components
