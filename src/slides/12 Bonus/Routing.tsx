@@ -9,7 +9,7 @@ export function Routing() {
           React-Router
         </a>{' '}
         wordt gezien als <em>de</em> default router binnen het React ecosysteem. Maar helaas wordt
-        routing binnen Pega applicaties niet gped ondersteund.
+        routing binnen Pega applicaties niet goed ondersteund.
       </p>
     </Prose>
   );

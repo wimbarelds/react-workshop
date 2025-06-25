@@ -11,7 +11,7 @@ export function UsingButton() {
       </h1>
       <p>De volgende: Button.</p>
       <p>
-        Deze is simpel, en er is selfs simpele{' '}
+        Deze is simpel, en er is zelfs simpele{' '}
         <a href="https://mui.com/material-ui/react-button/" target="_blank">
           documentatie
         </a>

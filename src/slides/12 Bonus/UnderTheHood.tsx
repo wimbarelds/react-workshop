@@ -16,7 +16,7 @@ export function UnderTheHood() {
           "state" onthouden.
         </li>
         <li>
-          De functie die je meegeeft aan o.a. useEffect wordt gecached op basis van de depdendency
+          De functie die je meegeeft aan o.a. useEffect wordt gecached op basis van de dependency
           array. Dat betekent dat, als je een stukje state update dat niet in de dependency array
           staat, het effect mogelijk nog een verouderde waarde voor dat stukje state heeft.
         </li>

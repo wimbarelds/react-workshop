@@ -25,7 +25,7 @@ export function JsInJSX() {
         </li>
         <li>
           Je kan de items uit een array met <code>{'array.map'}</code> tonen, let wel op: React is
-          per item een unieke "key" property nodig.
+          voor elk item een unieke "key" property nodig.
         </li>
       </ul>
     </Prose>

@@ -9,7 +9,7 @@ export function Component() {
     <Prose>
       <h1>Componenten en JSX</h1>
       <p>
-        Een component in React is gewoon een functie die <code>JSX</code> returned.
+        Een component in React is gewoon een functie die <code>JSX</code> returnt.
       </p>
       <Code code={example1} />
       <p>

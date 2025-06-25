@@ -22,7 +22,7 @@ export function JSX() {
       <h2>Voorbeeld</h2>
       <Code code={jsxText} />
       <p>
-        In dit voorbeeld is <code>naam</code> een javascript variable, die door de <code>{}</code>{' '}
+        In dit voorbeeld is <code>naam</code> een javascript variabele, die door de <code>{}</code>{' '}
         in de HTML wordt verwerkt.
       </p>
     </Prose>

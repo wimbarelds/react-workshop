@@ -17,7 +17,7 @@ export function PrepareDataLoading() {
         Met die laatste slide hebben we de belangrijkste onderwerpen gehad. Alles wat hierna nog
         komt is mooi meegenomen.
       </p>
-      <p>Nu gaan we naar data-loading. Om dat de doen een klein beetje voorbereiding.</p>
+      <p>Nu gaan we naar data-loading. Om dat te doen een klein beetje voorbereiding.</p>
       <h2>Download, of copy paste</h2>
       <code>db.json</code> <Code code={json} />
       <a href="./db.json" download="db.json" target="_blank" children="Download" />
