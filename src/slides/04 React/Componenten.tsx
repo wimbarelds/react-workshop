@@ -14,7 +14,7 @@ export function Componenten() {
       <Checkbox show={showComponents} setShow={setShowComponents}>
         Laat componenten zien
       </Checkbox>
-      <img src={showComponents ? 'steam-components.png' : 'steam-basic.png'} />
+      <img src={showComponents ? 'steam-components.jpg' : 'steam-basic.jpg'} />
     </Prose>
   );
 }

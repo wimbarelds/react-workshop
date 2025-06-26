@@ -27,7 +27,7 @@ export function PrepareDataLoading() {
         <code className="px-2 py-1 bg-gray-950 rounded-lg">npx json-server db.json</code>
       </p>
       <p>Je zou zo iets moeten zien:</p>
-      <img className="contrast-200 rounded-xl" src="json-server.png" />
+      <img className="contrast-200 rounded-xl" src="json-server.jpg" />
     </Prose>
   );
 }
