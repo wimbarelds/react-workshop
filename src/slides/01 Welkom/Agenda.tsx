@@ -3,7 +3,7 @@ import { Prose } from '../../shared/Prose';
 import { useTopics } from '../../slideStore';
 import { Arrow } from '../../svg/Arrow';
 import { Checkbox } from '../../shared/Checkbox';
-import { PizzaPreview } from '../07 Pizza/Pizza';
+import { PizzaPreview } from '../08 Pizza/Pizza';
 
 function formatTime(date: Date) {
   return `${date.getHours()}:${date.getMinutes().toString().padStart(2, '0')}`;

@@ -1,10 +1,10 @@
+import { Outlet } from 'react-router-dom';
 import { cn } from './shared/cn';
 import { useSlide } from './slideStore';
 import { Nav } from './ui/Nav';
 
 export function App() {
   const slide = useSlide();
-  const Slide = slide.view;
 
   return (
     <>
@@ -13,7 +13,7 @@ export function App() {
         data-background
       />
       <main className={cn('z-10 max-w-6xl p-12 pt-16 w-full mx-auto')} data-slide={slide.type}>
-        <Slide />
+        <Outlet />
       </main>
       <Nav />
     </>

@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import type { Slide, SlideComponent, Slides } from '../types';
+import type { BaseSlide, SlideComponent, Slides } from '../types';
 import { Welkom } from './01 Welkom/Welkom';
 import { Goals } from './01 Welkom/Goals';
 import { Agenda } from './01 Welkom/Agenda';
@@ -7,52 +7,71 @@ import { InScope } from './01 Welkom/InScope';
 import { Voorbeeld } from './02 GRWM/Voorbeeld';
 import { Setup } from './02 GRWM/Setup';
 import { Explanation } from './02 GRWM/Explanation';
-import { WatIsReact } from './03 React/WatIsReact';
-import { Componenten } from './03 React/Componenten';
-import { JSX } from './04 Componenten/JSX';
-import { Component } from './04 Componenten/Component';
-import { HelloWorld } from './04 Componenten/HelloWorld';
-import { Props } from './05 Props/Props';
-import { Children } from './05 Props/Children';
-import { TaskList } from './05 Props/TaskList';
-import { JsInJSX } from './06 JS in JSX/JsInJsx';
-import { Lists } from './06 JS in JSX/List';
-import { HideIfDone } from './06 JS in JSX/HideIfDone';
-import { Hooks } from './08 Hooks/Algemeen';
-import { UseState } from './08 Hooks/UseState';
-import { ToggleHideDone } from './08 Hooks/ToggleHideDone';
-import { Pizza, PizzaPreview } from './07 Pizza/Pizza';
-import { AddTask } from './08 Hooks/AddTask';
-import { MarkAsDone } from './08 Hooks/MarkAsDone';
-import { WhatAreEffects } from './08 Hooks/WhatAreEffects';
-import { WhenAllDone } from './08 Hooks/WhenAllDone';
-import { DataLoading } from './09 Fetch/DataLoading';
-import { WhatLibs } from './10 Libs/WhatLibs';
-import { InstallMui } from './10 Libs/InstallMui';
-import { UsingCard } from './10 Libs/UsingCard';
-import { UsingList } from './10 Libs/UsingList';
-import { UsingButton } from './10 Libs/UsingButton';
-import { QnA } from './11 QnA/QnA';
-import { MoreHooks } from './12 Bonus/MoreHooks';
-import { Routing } from './12 Bonus/Routing';
-import { UnderTheHood } from './12 Bonus/UnderTheHood';
-import { ReactQuery } from './12 Bonus/ReactQuery';
-import { PrepareDataLoading } from './09 Fetch/Prep';
+import { Javascript } from './03 JsTs/Javascript';
+import { Functions } from './03 JsTs/Functions';
+import { Arrays } from './03 JsTs/Arrays';
+import { Typescript } from './03 JsTs/Typescript';
+import { WatIsReact } from './04 React/WatIsReact';
+import { Componenten } from './04 React/Componenten';
+import { JSX } from './05 Componenten/JSX';
+import { Component } from './05 Componenten/Component';
+import { HelloWorld } from './05 Componenten/HelloWorld';
+import { Props } from './06 Props/Props';
+import { Children } from './06 Props/Children';
+import { TaskList } from './06 Props/TaskList';
+import { JsInJSX } from './07 JS in JSX/JsInJsx';
+import { Lists } from './07 JS in JSX/List';
+import { HideIfDone } from './07 JS in JSX/HideIfDone';
+import { Pizza, PizzaPreview } from './08 Pizza/Pizza';
+import { Hooks } from './09 Hooks/Algemeen';
+import { UseState } from './09 Hooks/UseState';
+import { ToggleHideDone } from './09 Hooks/ToggleHideDone';
+import { AddTask } from './09 Hooks/AddTask';
+import { MarkAsDone } from './09 Hooks/MarkAsDone';
+import { WhatAreEffects } from './09 Hooks/WhatAreEffects';
+import { WhenAllDone } from './09 Hooks/WhenAllDone';
+import { DataLoading } from './10 Fetch/DataLoading';
+import { PrepareDataLoading } from './10 Fetch/Prep';
+import { WhatLibs } from './11 Libs/WhatLibs';
+import { InstallMui } from './11 Libs/InstallMui';
+import { UsingCard } from './11 Libs/UsingCard';
+import { UsingList } from './11 Libs/UsingList';
+import { UsingButton } from './11 Libs/UsingButton';
+import { QnA } from './12 QnA/QnA';
+import { MoreHooks } from './13 Bonus/MoreHooks';
+import { Routing } from './13 Bonus/Routing';
+import { UnderTheHood } from './13 Bonus/UnderTheHood';
+import { ReactQuery } from './13 Bonus/ReactQuery';
 
 export const slides: Slides = [];
-const addTopic = (title: string, content: Slide | Slide[]) => {
-  if (Array.isArray(content)) slides.push({ title, slides: content });
-  else slides.push({ title, slides: [content] });
+
+const getSlideSlug = (slide: BaseSlide) => {
+  if (typeof slide.preview === 'string') return slide.preview;
+  return slide.view.displayName || slide.view.name;
 };
 
-const slide = (preview: ReactNode, duration: number, component: SlideComponent): Slide => ({
+const addTopic = (title: string, content: BaseSlide | BaseSlide[]) => {
+  if (!Array.isArray(content)) return addTopic(title, [content]);
+
+  const getPath = (slide: BaseSlide) => `/${slugify(title)}/${slugify(getSlideSlug(slide))}`;
+  const mapSlide = (slide: BaseSlide) => ({ ...slide, path: getPath(slide) });
+  const topicSlides = content.map(mapSlide);
+
+  slides.push({ title, slides: topicSlides, path: topicSlides[0].path });
+};
+
+const slide = (preview: ReactNode, duration: number, component: SlideComponent): BaseSlide => ({
   preview,
   duration,
   view: component,
   type: 'slide',
 });
 
-const assignment = (preview: ReactNode, duration: number, component: SlideComponent): Slide => ({
+const assignment = (
+  preview: ReactNode,
+  duration: number,
+  component: SlideComponent,
+): BaseSlide => ({
   ...slide(preview, duration, component),
   type: 'assignment',
 });
@@ -68,6 +87,13 @@ addTopic('Get ready with me?', [
   slide('Uitleg & Voorbeeld', 3, Voorbeeld),
   assignment('Setup', 10, Setup),
   slide('Uitleg bestanden', 2, Explanation),
+]);
+
+addTopic('JavaScript & TypeScript', [
+  slide('JavaScript', 5, Javascript),
+  slide('Functies', 5, Functions),
+  slide('Arrays', 5, Arrays),
+  slide('TypeScript', 10, Typescript),
 ]);
 
 addTopic('Wat is React', [slide('f(x) = UI', 4, WatIsReact), slide('Componenten', 6, Componenten)]);
@@ -123,3 +149,20 @@ addTopic('Bonus content', [
   slide('Under the hood', 0, UnderTheHood),
   assignment('React query', 0, ReactQuery),
 ]);
+
+// Change slide 0/0 path to '/'
+slides[0].path = '/';
+slides[0].slides[0].path = '/';
+
+// Helper functie
+function slugify(str: string): string {
+  return str
+    .toString()
+    .normalize('NFD')
+    .replace(/\p{M}/gu, '')
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, '-')
+    .replace(/[^\w-]+/g, '')
+    .replace(/--+/g, '-');
+}

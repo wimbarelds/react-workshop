@@ -18,7 +18,7 @@ export function MarkAsDone() {
         ook van de child terug naar de parent.
       </p>
       <p>
-        Zo kan bijvoorbeeld on <code>TaskList</code> component een functie meegeven aan het{' '}
+        Zo kan bijvoorbeeld ons <code>TaskList</code> component een functie meegeven aan het{' '}
         <code>Task</code> component, zodat een taak zichzelf kan markeren als "completed".
       </p>
       <p>De opdracht is dus om dat te bouwen, hier alvast een kleine helper functie</p>

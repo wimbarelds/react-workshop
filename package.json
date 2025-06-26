@@ -12,11 +12,13 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "4.1.10",
+    "@types/react-router-dom": "^5.3.3",
     "clsx": "2.1.1",
     "prettier-plugin-package": "1.4.0",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-markdown": "10.1.0",
+    "react-router-dom": "^7.6.2",
     "react-syntax-highlighter": "15.6.1",
     "remark-gfm": "4.0.1",
     "tailwind-merge": "3.3.1",
@@ -39,4 +41,3 @@
     "vite": "6.3.5"
   }
 }
-
