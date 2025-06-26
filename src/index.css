@@ -1,11 +1,18 @@
 @import 'tailwindcss';
 @plugin "@tailwindcss/typography";
 @config "./tailwind.config.js";
-@import './sopra-gradient.css';
 
 @custom-variant dark (&:where(.dark, .dark *));
 
 @layer base {
+  html {
+    --colors:
+      color-mix(in oklch, oklch(36.322% 0.15751 300.084) 75%, black),
+      color-mix(in oklch, oklch(45.455% 0.18093 331.818) 75%, black),
+      color-mix(in oklch, oklch(53.975% 0.21708 22.821) 75%, black),
+      color-mix(in oklch, oklch(70.528% 0.17361 55.465) 75%, black);
+    background: linear-gradient(45deg, var(--colors));
+  }
   button,
   summary {
     @apply cursor-pointer;

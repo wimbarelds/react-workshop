@@ -8,5 +8,6 @@
   "jsxSingleQuote": false,
   "semi": true,
   "arrowParens": "always",
-  "plugins": ["prettier-plugin-package"]
+  "plugins": ["prettier-plugin-package"],
+  "endOfLine": "auto"
 }

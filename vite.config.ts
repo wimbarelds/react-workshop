@@ -1,3 +1,4 @@
+/// <reference types="vitest" />
 import { defineConfig, type PluginOption } from 'vite';
 import react from '@vitejs/plugin-react-swc';
 import tailwindcss from '@tailwindcss/vite';
@@ -17,5 +18,10 @@ const baseHrefPlugin = (): PluginOption => {
 export default defineConfig(() => {
   return {
     plugins: [react(), tailwindcss(), baseHrefPlugin()],
+    test: {
+      globals: true,
+      environment: 'jsdom',
+      setupFiles: './src/setupTests.ts',
+    },
   };
 });
