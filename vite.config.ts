@@ -1,14 +1,21 @@
 import { defineConfig, type PluginOption } from 'vite';
 import react from '@vitejs/plugin-react-swc';
 import tailwindcss from '@tailwindcss/vite';
+import { argv } from 'process';
+import minimist from 'minimist';
 
-const baseHrefPlugin: PluginOption = {
-  name: 'html-basehref',
-  transformIndexHtml: (_, ctx) => [
-    { tag: 'base', attrs: { href: ctx.server?.config.base ?? '/' }, injectTo: 'head-prepend' },
-  ],
+const baseHrefPlugin = (): PluginOption => {
+  const { base = '/' } = minimist(argv.slice(2));
+
+  return {
+    name: 'html-basehref',
+    config: (current) => ({ ...current, base }),
+    transformIndexHtml: () => [{ tag: 'base', attrs: { href: base }, injectTo: 'head-prepend' }],
+  };
 };
 
-export default defineConfig(() => ({
-  plugins: [react(), tailwindcss(), baseHrefPlugin],
-}));
+export default defineConfig(() => {
+  return {
+    plugins: [react(), tailwindcss(), baseHrefPlugin()],
+  };
+});
