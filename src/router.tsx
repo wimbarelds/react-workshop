@@ -14,10 +14,13 @@ const slideRoutes = slides
   .flatMap((topic) => topic.slides.map(slideToRoute))
   .map((route, index) => (index > 0 ? route : { ...route, index: true }));
 
-export const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <App />,
-    children: slideRoutes,
-  },
-]);
+export const router = createBrowserRouter(
+  [
+    {
+      path: '/',
+      element: <App />,
+      children: slideRoutes,
+    },
+  ],
+  { basename: new URL(document.baseURI).pathname || undefined },
+);
