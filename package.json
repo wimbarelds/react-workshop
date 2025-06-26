@@ -7,9 +7,12 @@
     "build": "tsc -b && vite build",
     "dev": "vite",
     "lint": "eslint .",
-    "prettier": "prettier . -w",
+    "lint:fix": "eslint . --fix",
+    "prettier": "prettier . -c",
+    "prettier:fix": "prettier . -w",
     "preview": "vite preview",
-    "test": "vitest"
+    "test": "vitest",
+    "tsc": "tsc -b"
   },
   "dependencies": {
     "@tailwindcss/vite": "4.1.11",
@@ -50,4 +53,3 @@
     "vitest": "^3.2.4"
   }
 }
-
