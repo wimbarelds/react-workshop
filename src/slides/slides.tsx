@@ -42,6 +42,10 @@ import { MoreHooks } from './13 Bonus/MoreHooks';
 import { Routing } from './13 Bonus/Routing';
 import { UnderTheHood } from './13 Bonus/UnderTheHood';
 import { ReactQuery } from './13 Bonus/ReactQuery';
+import { Recap } from './08.5 Recap/Recap';
+import Plan from './08.5 Recap/Plan';
+import StarterProject from './08.5 Recap/StarterProject';
+import HuidigeCodeDoorlopen from './08.5 Recap/HuidigeCodeDoorlopen';
 
 export const slides: Slides = [];
 
@@ -117,6 +121,14 @@ addTopic('Javascript in JSX', [
 ]);
 
 addTopic('Pizza!', [slide(<PizzaPreview />, 40, Pizza)]);
+
+addTopic('Recap', [
+  slide('plan voor vandaag', 10, Plan),
+  slide('Recap', 10, Recap),
+  slide('Typescript', 10, Typescript),
+  slide('HuidigeCodeDoorlopen', 10, HuidigeCodeDoorlopen),
+  assignment('opzetten project', 10, StarterProject),
+]);
 
 addTopic('Hooks', [
   slide('Hooks algemeen', 3, Hooks),
