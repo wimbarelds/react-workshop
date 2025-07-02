@@ -1,4 +1,4 @@
 let student: { naam: string; leeftijd: number } = {
-  naam: "Bob",
+  naam: 'Bob',
   leeftijd: 20,
 };

@@ -5,7 +5,7 @@ interface Student {
 }
 
 let nieuweStudent: Student = {
-  naam: "Charlie",
+  naam: 'Charlie',
   leeftijd: 22,
 };
 
@@ -20,7 +20,7 @@ interface StudentUitgebreid extends Persoon {
 }
 
 let student: StudentUitgebreid = {
-  naam: "Dana",
+  naam: 'Dana',
   leeftijd: 19,
-  opleiding: "Informatica",
+  opleiding: 'Informatica',
 };
