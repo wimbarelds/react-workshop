@@ -24,6 +24,10 @@ import { HideIfDone } from './07 JS in JSX/HideIfDone';
 import { JsInJSX } from './07 JS in JSX/JsInJsx';
 import { Lists } from './07 JS in JSX/List';
 import { Pizza, PizzaPreview } from './08 Pizza/Pizza';
+import { HuidigeCodeDoorlopen } from './08.5 Recap/HuidigeCodeDoorlopen';
+import { Plan } from './08.5 Recap/Plan';
+import { Recap } from './08.5 Recap/Recap';
+import { StarterProject } from './08.5 Recap/StarterProject';
 import { AddTask } from './09 Hooks/AddTask';
 import { Hooks } from './09 Hooks/Algemeen';
 import { MarkAsDone } from './09 Hooks/MarkAsDone';
@@ -118,6 +122,14 @@ addTopic('Javascript in JSX', [
 ]);
 
 addTopic('Pizza!', [slide(<PizzaPreview />, 40, Pizza)]);
+
+addTopic('Recap', [
+  slide('plan voor vandaag', 10, Plan),
+  slide('Recap', 10, Recap),
+  slide('Typescript', 10, Typescript),
+  slide('HuidigeCodeDoorlopen', 10, HuidigeCodeDoorlopen),
+  assignment('opzetten project', 10, StarterProject),
+]);
 
 addTopic('Hooks', [
   slide('Hooks algemeen', 3, Hooks),
