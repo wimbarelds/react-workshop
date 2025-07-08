@@ -1,8 +1,9 @@
-import { render, screen, act } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
-import { describe, it, expect, vi } from 'vitest';
-import { Nav } from './Nav';
 import { MemoryRouter } from 'react-router-dom';
+import { describe, expect, it, vi } from 'vitest';
+
+import { Nav } from './Nav';
 
 // Mock the slideStore for consistent test results
 vi.mock('../../slideStore', () => ({
@@ -33,7 +34,7 @@ describe('Nav', () => {
 
     const openBtn = screen.getByRole('button', { name: /open slide navigator/i });
     expect(openBtn).toBeInTheDocument();
-    await act(() => openBtn.click());
+    await userEvent.click(openBtn);
 
     expect(screen.getByRole('navigation', { name: /slide navigation/i })).toBeInTheDocument();
   });

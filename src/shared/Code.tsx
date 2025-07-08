@@ -1,7 +1,8 @@
 import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import tsx from 'react-syntax-highlighter/dist/esm/languages/prism/tsx';
 import xml from 'react-syntax-highlighter/dist/esm/languages/prism/xml-doc';
+import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
+
 import { MarkDown } from './Markdown';
 
 SyntaxHighlighter.registerLanguage('tsx', tsx);

@@ -1,6 +1,7 @@
 import { renderHook } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
-import { describe, it, expect, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
+
 import { useNavTriggers } from './useNavTriggers';
 
 const nextSlide = vi.fn();

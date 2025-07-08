@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+
 import Code from '../../shared/Code';
 import { Prose } from '../../shared/Prose';
 
@@ -27,7 +28,11 @@ export function PrepareDataLoading() {
         <code className="px-2 py-1 bg-gray-950 rounded-lg">npx json-server db.json</code>
       </p>
       <p>Je zou zo iets moeten zien:</p>
-      <img className="contrast-200 rounded-xl" src="json-server.jpg" />
+      <img
+        className="contrast-200 rounded-xl"
+        src="json-server.jpg"
+        alt="Terminal output of json-server"
+      />
     </Prose>
   );
 }

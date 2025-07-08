@@ -12,7 +12,7 @@ export function UsingButton() {
       <p>De volgende: Button.</p>
       <p>
         Deze is simpel, en er is zelfs simpele{' '}
-        <a href="https://mui.com/material-ui/react-button/" target="_blank">
+        <a href="https://mui.com/material-ui/react-button/" target="_blank" rel="noreferrer">
           documentatie
         </a>
         !

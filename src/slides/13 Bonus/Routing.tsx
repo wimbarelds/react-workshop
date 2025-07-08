@@ -5,7 +5,11 @@ export function Routing() {
     <Prose>
       <h1>Routing</h1>
       <p>
-        <a href="https://reactrouter.com/start/declarative/routing" target="_blank">
+        <a
+          href="https://reactrouter.com/start/declarative/routing"
+          target="_blank"
+          rel="noreferrer"
+        >
           React-Router
         </a>{' '}
         wordt gezien als <em>de</em> default router binnen het React ecosysteem. Maar helaas wordt

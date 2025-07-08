@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+
 import { useSlideNav } from '../../slideStore';
 
 export function useNavTriggers() {

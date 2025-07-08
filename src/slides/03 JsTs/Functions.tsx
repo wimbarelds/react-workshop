@@ -1,8 +1,8 @@
-import { Prose } from '../../shared/Prose';
 import Code from '../../shared/Code';
-import FunctionDeclaration from './examples/JavascriptFunctionDeclaration.js?raw';
+import { Prose } from '../../shared/Prose';
 import FunctionArrow from './examples/JavascriptFunctionArrow.js?raw';
 import FunctionCallback from './examples/JavascriptFunctionCallback.js?raw';
+import FunctionDeclaration from './examples/JavascriptFunctionDeclaration.js?raw';
 
 export function Functions() {
   return (
