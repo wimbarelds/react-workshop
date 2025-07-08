@@ -12,7 +12,11 @@ export function UsingList() {
       <p>De volgende: List en ListItem.</p>
       <p>
         Ook hier is de{' '}
-        <a href="https://mui.com/material-ui/react-list/#introduction" target="_blank">
+        <a
+          href="https://mui.com/material-ui/react-list/#introduction"
+          target="_blank"
+          rel="noreferrer"
+        >
           documentatie
         </a>{' '}
         weer flink over-complicated. Maar ik denk dat jullie hier ook wel uitkomen.

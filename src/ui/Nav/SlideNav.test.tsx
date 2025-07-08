@@ -1,8 +1,9 @@
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
-import { describe, it, expect, vi } from 'vitest';
-import { SlideNav } from './SlideNav';
 import { MemoryRouter } from 'react-router-dom';
+import { describe, expect, it, vi } from 'vitest';
+
+import { SlideNav } from './SlideNav';
 
 // Mock the slideStore for consistent test results
 vi.mock('../../slideStore', () => ({

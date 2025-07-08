@@ -10,6 +10,7 @@ export function ReactQuery() {
         <a
           href="https://tanstack.com/query/latest/docs/framework/react/examples/simple"
           target="_blank"
+          rel="noreferrer"
         >
           React Query
         </a>{' '}

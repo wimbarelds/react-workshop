@@ -1,7 +1,7 @@
-import { Prose } from '../../shared/Prose';
 import Code from '../../shared/Code';
-import JsxMap from './examples/JavascriptMap.js?raw';
+import { Prose } from '../../shared/Prose';
 import JsxFilter from './examples/JavascriptFunctionCallback.js?raw';
+import JsxMap from './examples/JavascriptMap.js?raw';
 
 export function Arrays() {
   return (

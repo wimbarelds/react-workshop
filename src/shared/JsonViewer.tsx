@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+
 import type { JsonData } from '../types';
 import { cn } from './cn';
 
@@ -82,9 +83,9 @@ function JsonArrayViewer({ propertyText, data }: Props<JsonData[]>) {
     <div className="flex flex-col">
       <div className="flex gap-2 items-center justify-start">
         <ToggleButton {...{ expanded, setExpanded }} />
-        <code onClick={() => setExpanded((prev) => !prev)} className="text-gray-300">
-          {propertyText}
-        </code>
+        <button onClick={() => setExpanded((prev) => !prev)}>
+          <code className="text-gray-300">{propertyText}</code>
+        </button>
         <code className="text-sky-400">(array)</code>({Object.keys(data).length} items)
       </div>
       {expanded && (
@@ -127,9 +128,9 @@ function JsonObjectViewer({ propertyText, data }: Props<JsonObject>) {
     <div className="flex flex-col">
       <div className="flex gap-2 items-center justify-start">
         <ToggleButton {...{ expanded, setExpanded }} />
-        <code onClick={() => setExpanded((prev) => !prev)} className="text-gray-300">
-          {propertyText}
-        </code>
+        <button onClick={() => setExpanded((prev) => !prev)}>
+          <code className="text-gray-300">{propertyText}</code>
+        </button>
         <code className="text-sky-400">(object)</code>({Object.keys(data).length} items)
       </div>
       {expanded && (

@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { Prose } from '../../shared/Prose';
+
 import { Checkbox } from '../../shared/Checkbox';
+import { Prose } from '../../shared/Prose';
 
 export function Componenten() {
   const [showComponents, setShowComponents] = useState(false);
@@ -14,7 +15,14 @@ export function Componenten() {
       <Checkbox show={showComponents} setShow={setShowComponents}>
         Laat componenten zien
       </Checkbox>
-      <img src={showComponents ? 'steam-components.jpg' : 'steam-basic.jpg'} />
+      <img
+        src={showComponents ? 'steam-components.jpg' : 'steam-basic.jpg'}
+        alt={
+          showComponents
+            ? 'Screenshot of steam homepage, with various components outlined'
+            : 'Screenshot of steam homepage'
+        }
+      />
     </Prose>
   );
 }

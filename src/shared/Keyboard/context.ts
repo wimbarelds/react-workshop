@@ -1,10 +1,11 @@
 import { createContext, useContext } from 'react';
-import type { KeyboardContext } from './types';
-import { defaultBaseKeySize } from './consts';
 
-const KeyboardContext = createContext<KeyboardContext>({ baseKeySize: defaultBaseKeySize });
+import { defaultBaseKeySize } from './consts';
+import type { KeyboardContext } from './types';
+
+const keyboardContext = createContext<KeyboardContext>({ baseKeySize: defaultBaseKeySize });
 type KeyboardContextResult = KeyboardContext & { baseKeySize: number };
 
-export const KeyboardContextProvider = KeyboardContext.Provider;
+export const KeyboardContextProvider = keyboardContext.Provider;
 
-export const useKeyboardContext = () => useContext(KeyboardContext) as KeyboardContextResult;
+export const useKeyboardContext = () => useContext(keyboardContext) as KeyboardContextResult;

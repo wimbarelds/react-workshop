@@ -1,8 +1,9 @@
-import type { Dispatch, MouseEventHandler } from 'react';
-import { useHasNextSlide, useHasPrevSlide, useSlideNav } from '../../slideStore';
+import type { Dispatch } from 'react';
+
 import { cn } from '../../shared/cn';
-import { More } from '../../svg/More';
+import { useHasNextSlide, useHasPrevSlide, useSlideNav } from '../../slideStore';
 import { Arrow } from '../../svg/Arrow';
+import { More } from '../../svg/More';
 
 interface BarProps {
   open?: boolean;
@@ -50,7 +51,7 @@ export function QuickBar({ open, setOpen }: BarProps) {
 }
 
 interface ArrowButtonProps {
-  onClick?: MouseEventHandler;
+  onClick?: () => void;
   disabled?: boolean;
   className?: string;
   iconClass?: string;
@@ -59,16 +60,29 @@ function ArrowButton({ className, disabled, iconClass, onClick }: ArrowButtonPro
   return (
     <button
       onClick={onClick}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.stopPropagation();
+          e.preventDefault();
+          onClick?.();
+        }
+      }}
       disabled={disabled}
       className={cn(
-        'bg-cyan-950',
-        'border-2 rounded-full w-8 h-6 flex items-center justify-center',
-        'border-current pointer-events-auto text-slate-300',
+        'text-slate-300 pointer-events-auto p-2',
         'disabled:text-slate-400 disabled:cursor-default',
-        className,
       )}
     >
-      <Arrow width={15} height={10} thickness={3} className={iconClass} />
+      <div
+        className={cn(
+          'bg-cyan-950',
+          'border-2 rounded-full w-8 h-6 flex items-center justify-center',
+          'border-current',
+          className,
+        )}
+      >
+        <Arrow width={15} height={10} thickness={3} className={iconClass} />
+      </div>
     </button>
   );
 }

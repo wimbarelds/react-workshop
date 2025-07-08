@@ -1,6 +1,6 @@
 import { Prose } from '../../shared/Prose';
 
-export default function Plan() {
+export function Plan() {
   return (
     <Prose>
       <h1>Wat gaan we vandaag doen?</h1>

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+
 import { cn } from '../shared/cn';
 import { QuickBar } from './Nav/QuickBar';
 import { SlideNav } from './Nav/SlideNav';
@@ -27,15 +28,21 @@ export function Nav() {
 
   return (
     <div
-      onClick={bgClick}
       className={cn(
         'fixed left-0 top-0 h-full w-[100svw] px-6 py-2 pointer-events-none isolate z-20',
         {
-          'pointer-events-auto before:-z-10 before:bg-slate-800 before:absolute before:inset-0 before:opacity-80 transition-opacity':
+          'before:-z-10 before:bg-slate-800 before:absolute before:inset-0 before:opacity-80 transition-opacity':
             open,
         },
       )}
     >
+      <div
+        onClick={bgClick}
+        className={cn('absolute left-0 top-0 h-full w-[100svw] pointer-events-none -z-10', {
+          'pointer-events-auto': open,
+        })}
+        aria-hidden="true"
+      />
       <QuickBar {...{ open, setOpen }} />
       <SlideNav {...{ open, setOpen }} />
     </div>
