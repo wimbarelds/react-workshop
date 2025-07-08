@@ -1,7 +1,8 @@
-import { useEffect, useRef, type Dispatch } from 'react';
-import { useSlide, useSlides } from '../../slideStore';
+import { type Dispatch, useEffect, useRef } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+
 import { cn } from '../../shared/cn';
-import { Link } from 'react-router-dom';
+import { useSlide, useSlides } from '../../slideStore';
 
 interface SlideNavProps {
   open?: boolean;
@@ -12,6 +13,24 @@ export function SlideNav({ open, setOpen }: SlideNavProps) {
   const navRef = useRef<HTMLElement>(null);
   const slide = useSlide();
   const slides = useSlides();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!open) return;
+
+    const onEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        setOpen(false);
+      }
+    };
+
+    window.addEventListener('keydown', onEscape);
+
+    return () => {
+      window.removeEventListener('keydown', onEscape);
+    };
+  }, [open, setOpen]);
 
   useEffect(() => {
     const navEl = navRef.current;
@@ -28,12 +47,19 @@ export function SlideNav({ open, setOpen }: SlideNavProps) {
     };
   }, [open]);
 
+  useEffect(() => {
+    if (open) {
+      document.querySelector<HTMLAnchorElement>('a[data-current="true"]')?.focus();
+    }
+  }, [open]);
+
   return (
     <nav
       ref={navRef}
+      inert={!open}
       aria-hidden={!open}
       aria-label="Slide navigation"
-      className={cn('transition-all duration-400', {
+      className={cn('transition-all duration-400 relative z-20', {
         'opacity-0 -translate-y-full': !open,
       })}
     >
@@ -43,10 +69,19 @@ export function SlideNav({ open, setOpen }: SlideNavProps) {
             <Link
               to={topic.path}
               onClick={() => setOpen(false)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  if (e.target instanceof HTMLElement) e.target.blur();
+                  e.preventDefault();
+                  e.stopPropagation();
+                  navigate(topic.path);
+                  setOpen(false);
+                }
+              }}
               className="
                 h-16 flex items-center justify-center text-center border p-1 rounded mx-2 mb-4
                 py-2.5 leading-[1.2] bg-slate-100/75 text-black font-bold px-2
-                transition hover:bg-slate-200
+                transition hover:bg-slate-200 pointer-events-auto
               "
             >
               {topic.title}
@@ -59,6 +94,16 @@ export function SlideNav({ open, setOpen }: SlideNavProps) {
                   <li key={slideIndex}>
                     <Link
                       to={item.path}
+                      data-current={isActive ? 'true' : 'false'}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          if (e.target instanceof HTMLElement) e.target.blur();
+                          e.preventDefault();
+                          e.stopPropagation();
+                          navigate(item.path);
+                          setOpen(false);
+                        }
+                      }}
                       onClick={() => {
                         if (document.activeElement instanceof HTMLElement) {
                           document.activeElement.blur();
@@ -66,12 +111,13 @@ export function SlideNav({ open, setOpen }: SlideNavProps) {
                         setOpen(false);
                       }}
                       className={cn(
-                        'border p-1 rounded transition hover:scale-105 w-full py-2.5 leading-[1.2] opacity-75 bg-slate-800 block text-center',
+                        'border p-1 rounded transition hover:scale-105 w-full py-2.5 leading-[1.2] opacity-75 bg-slate-800 block text-center pointer-events-auto focus:outline-2 outline-sky-400',
                         { 'border-yellow-500': isAssignment },
                         { 'border-2': isActive },
                         {
-                          [isAssignment ? 'ring-2 ring-yellow-200' : 'ring-blue-500 ring-4']:
-                            isActive,
+                          [isAssignment
+                            ? 'ring-2 ring-yellow-200 focus:ring-yellow-400'
+                            : 'ring-sky-500 ring-4']: isActive,
                         },
                       )}
                     >

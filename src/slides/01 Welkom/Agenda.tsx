@@ -1,8 +1,9 @@
 import { useMemo, useState } from 'react';
+
+import { Checkbox } from '../../shared/Checkbox';
 import { Prose } from '../../shared/Prose';
 import { useTopics } from '../../slideStore';
 import { Arrow } from '../../svg/Arrow';
-import { Checkbox } from '../../shared/Checkbox';
 import { PizzaPreview } from '../08 Pizza/Pizza';
 
 function formatTime(date: Date) {

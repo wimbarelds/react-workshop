@@ -1,9 +1,9 @@
 /// <reference types="vitest" />
-import { defineConfig, type PluginOption } from 'vite';
-import react from '@vitejs/plugin-react-swc';
 import tailwindcss from '@tailwindcss/vite';
-import { argv } from 'process';
+import react from '@vitejs/plugin-react-swc';
 import minimist from 'minimist';
+import { argv } from 'process';
+import { defineConfig, type PluginOption } from 'vite';
 
 const baseHrefPlugin = (): PluginOption => {
   const { base = '/' } = minimist(argv.slice(2));

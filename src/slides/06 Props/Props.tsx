@@ -1,9 +1,10 @@
-import { Prose } from '../../shared/Prose';
+import { useState } from 'react';
+
+import { Checkbox } from '../../shared/Checkbox';
 import Code from '../../shared/Code';
+import { Prose } from '../../shared/Prose';
 import exampleProps1Jsx from './examples/ExampleProps1.jsx?raw';
 import exampleProps1Tsx from './examples/ExampleProps1.tsx?raw';
-import { Checkbox } from '../../shared/Checkbox';
-import { useState } from 'react';
 
 export function Props() {
   const [typescript, setTypescript] = useState(false);

@@ -11,7 +11,7 @@ export function WhatLibs() {
       <p>
         Die libraries gebruiken dan bijna altijd ook weer andere libraries. Pega's SDK components
         maken bijvoorbeeld gebruik van{' '}
-        <a href="https://mui.com/material-ui/api/list/" target="_blank">
+        <a href="https://mui.com/material-ui/api/list/" target="_blank" rel="noreferrer">
           MUI
         </a>
         , een van de populairste componenten libraries.

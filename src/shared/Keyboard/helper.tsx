@@ -1,4 +1,5 @@
 import type { CSSProperties } from 'react';
+
 import { widths } from './consts';
 import type { KeyStuff } from './types';
 

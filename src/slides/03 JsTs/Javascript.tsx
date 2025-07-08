@@ -1,5 +1,5 @@
-import { Prose } from '../../shared/Prose';
 import Code from '../../shared/Code';
+import { Prose } from '../../shared/Prose';
 import JsxIfElse from './examples/JavascriptIfElse.js?raw';
 import JsxLogical from './examples/JavascriptLogicalOperators.js?raw';
 

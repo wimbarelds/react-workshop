@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+
 import { slides } from './slides/slides';
 
 function getSlideIndicesFromPathname(pathname: string): [number, number] {

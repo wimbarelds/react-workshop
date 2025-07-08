@@ -1,9 +1,10 @@
-import { Prose } from '../../shared/Prose';
+import { useState } from 'react';
+
+import { Checkbox } from '../../shared/Checkbox';
 import Code from '../../shared/Code';
+import { Prose } from '../../shared/Prose';
 import exampleChildrenJsx from './examples/ExampleChildren.jsx?raw';
 import exampleChildrenTsx from './examples/ExampleChildren.tsx?raw';
-import { Checkbox } from '../../shared/Checkbox';
-import { useState } from 'react';
 
 export function Children() {
   const [typescript, setTypescript] = useState(false);
