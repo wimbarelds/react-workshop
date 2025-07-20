@@ -2,12 +2,12 @@ import './index.css';
 
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { RouterProvider } from 'react-router-dom';
+import { SlidesRouterProvider } from 'wb-slides';
 
-import { router } from './router';
+import { slides } from './slides/slides';
 
 createRoot(document.querySelector('#app')!).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <SlidesRouterProvider slides={slides} />
   </StrictMode>,
 );
