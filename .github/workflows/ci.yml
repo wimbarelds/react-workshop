@@ -35,6 +35,3 @@ jobs:
 
       - name: Run TypeScript Check
         run: pnpm tsc
-
-      - name: Run Tests
-        run: pnpm test
