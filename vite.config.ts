@@ -1,4 +1,6 @@
-/// <reference types="vitest" />
+/// <reference types="vitest/config" />
+
+import mdx from '@mdx-js/rollup';
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react-swc';
 import minimist from 'minimist';
@@ -15,9 +17,14 @@ const baseHrefPlugin = (): PluginOption => {
   };
 };
 
+const mdxPlugin = (): PluginOption => ({
+  enforce: 'pre',
+  ...mdx({ providerImportSource: '@mdx-js/react' }),
+});
+
 export default defineConfig(() => {
   return {
-    plugins: [react(), tailwindcss(), baseHrefPlugin()],
+    plugins: [mdxPlugin(), react(), tailwindcss(), baseHrefPlugin()],
     test: {
       globals: true,
       environment: 'jsdom',
