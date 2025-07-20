@@ -1,4 +1,5 @@
 import { useState } from 'react';
+
 import { Keyboard } from '../../shared/Keyboard';
 import { Prose } from '../../shared/Prose';
 
@@ -58,6 +59,7 @@ export function Setup() {
         >
           <div
             className="w-full h-full flex items-center justify-center"
+            aria-hidden="true"
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();

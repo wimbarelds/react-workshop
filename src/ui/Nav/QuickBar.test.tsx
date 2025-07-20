@@ -1,8 +1,9 @@
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { QuickBar } from './QuickBar';
 import { MemoryRouter } from 'react-router-dom';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
+import { QuickBar } from './QuickBar';
 
 // Mock the slideStore module
 const mockUseHasPrevSlide = vi.fn();

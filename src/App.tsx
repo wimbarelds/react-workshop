@@ -1,4 +1,5 @@
 import { Outlet } from 'react-router-dom';
+
 import { cn } from './shared/cn';
 import { useSlide } from './slideStore';
 import { Nav } from './ui/Nav';

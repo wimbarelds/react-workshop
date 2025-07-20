@@ -1,5 +1,5 @@
-import { Prose } from '../../shared/Prose';
 import Code from '../../shared/Code';
+import { Prose } from '../../shared/Prose';
 import TsBasic from './examples/TypescriptBasicTypes.ts?raw';
 import TsInterface from './examples/TypescriptInterface.ts?raw';
 

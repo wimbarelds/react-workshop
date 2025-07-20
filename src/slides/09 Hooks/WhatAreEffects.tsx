@@ -1,6 +1,5 @@
 import Code from '../../shared/Code';
 import { Prose } from '../../shared/Prose';
-
 import effectExample from './examples/ExampleEffect.jsx?raw';
 
 export function WhatAreEffects() {

@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+
 import { Prose } from '../../shared/Prose';
 
 export function Pizza() {

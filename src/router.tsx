@@ -1,4 +1,5 @@
 import { createBrowserRouter } from 'react-router-dom';
+
 import { App } from './App';
 import { slides } from './slides/slides';
 import type { Slide } from './types';

@@ -15,7 +15,7 @@ export function Welkom() {
       <h2>Workshop React</h2>
       <p className="text-2xl">
         <strong>Slides:</strong>{' '}
-        <a href={url} target="_blank" className="font-mono">
+        <a href={url} target="_blank" className="font-mono" rel="noreferrer">
           {url}
         </a>
       </p>

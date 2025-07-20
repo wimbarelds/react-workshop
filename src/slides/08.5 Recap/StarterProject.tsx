@@ -1,6 +1,6 @@
 import { Prose } from '../../shared/Prose';
 
-export default function StarterProject() {
+export function StarterProject() {
   return (
     <Prose>
       <h1>Starter project downloaden</h1>

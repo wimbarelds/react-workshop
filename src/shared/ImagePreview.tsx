@@ -16,12 +16,9 @@ export function ImagePreview({ src, alt = '' }: Props) {
 
   return (
     <>
-      <img
-        src={src}
-        alt={alt}
-        className="w-[300px] cursor-zoom-in rounded shadow"
-        onClick={openModal}
-      />
+      <button onClick={openModal}>
+        <img src={src} alt={alt} className="w-[300px] cursor-zoom-in rounded shadow" />
+      </button>
 
       {createPortal(
         <dialog
