@@ -1,5 +1,6 @@
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const fontImports = `
   import '@fontsource/roboto/300.css';
   import '@fontsource/roboto/400.css';
@@ -25,13 +26,13 @@ export const ButtonLink = ({ children }: LinkProps) => (
   </a>
 );
 
-export const CardLink = () => (
+export const CardLink = ({ children }: LinkProps) => (
   <a href="https://mui.com/material-ui/react-card/" target="_blank" rel="noreferrer">
     {children}
   </a>
 );
 
-export const ListLink = () => (
+export const ListLink = ({ children }: LinkProps) => (
   <a href="https://mui.com/material-ui/react-list/#introduction" target="_blank" rel="noreferrer">
     {children}
   </a>

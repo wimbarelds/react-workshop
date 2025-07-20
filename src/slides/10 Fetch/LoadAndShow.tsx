@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { type ReactNode, useEffect, useState } from 'react';
 
 interface Props {
   url: string;

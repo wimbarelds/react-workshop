@@ -6,7 +6,6 @@ import Scope from './01 Welkom/Scope.mdx';
 import Welkom from './01 Welkom/Welkom.mdx';
 import Explanation from './02 GRWM/Explanation.mdx';
 import Setup from './02 GRWM/Setup.mdx';
-import Voorbeeld from './02 GRWM/Voorbeeld.mdx';
 import Arrays from './03 JsTs/Arrays.mdx';
 import Functions from './03 JsTs/Functions.mdx';
 import Javascript from './03 JsTs/Javascript.mdx';
