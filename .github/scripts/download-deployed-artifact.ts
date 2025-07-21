@@ -5,7 +5,7 @@ import axios from 'axios';
 import fs from 'fs';
 
 async function run() {
-  core.info('Starting download-deployed-artifact.ts script (REST API approach)...');
+  core.info('Starting download-deployed-artifact.ts script (Targeting Main Workflow Artifact)...');
   try {
     const token = core.getInput('github_token', { required: true });
     if (!token) {
@@ -16,95 +16,56 @@ async function run() {
 
     const octokit = github.getOctokit(token);
     const { owner, repo } = github.context.repo;
-    const pagesEnv = 'github-pages'; // Standard GitHub Pages environment name
-    core.info(`DEBUG: Repository: ${owner}/${repo}, Environment: ${pagesEnv}`);
+    const artifactName = 'github-pages'; // Standard artifact name for Pages builds
 
-    // --- NEW LOGIC: Use REST API to find the active deployment status and extract workflow_run ID ---
-    core.info(`DEBUG: Listing deployments for environment '${pagesEnv}'...`);
-    const { data: deployments } = await octokit.rest.repos.listDeployments({
-      owner,
-      repo,
-      environment: pagesEnv,
-      per_page: 5, // Get a few recent ones
-    });
-
-    if (!deployments || deployments.length === 0) {
-      core.warning(`DEBUG: No deployments found for environment '${pagesEnv}'.`);
-      core.setOutput('download-path', 'empty');
-      return;
-    }
-
-    core.info(`DEBUG: Found ${deployments.length} deployments. Searching for an active status...`);
-
-    let activeRunId: number | undefined;
-    let foundDeploymentUrl: string | undefined;
-
-    for (const deployment of deployments) {
-      core.info(`DEBUG: Checking deployment ID: ${deployment.id}`);
-      const { data: statuses } = await octokit.rest.repos.listDeploymentStatuses({
-        owner,
-        repo,
-        deployment_id: deployment.id,
-        per_page: 1, // Only need the latest status for efficiency
-        page: 1,
-      });
-
-      if (!statuses || statuses.length === 0) {
-        core.info(`DEBUG:   No statuses found for deployment ID: ${deployment.id}. Skipping.`);
-        continue;
-      }
-
-      const latestStatus = statuses[0];
-      core.info(
-        `DEBUG:   Latest status for deployment ${deployment.id}: State='${latestStatus.state}', LogURL=${latestStatus.log_url}`,
-      );
-
-      // --- CHANGE THIS LINE ---
-      // Look for 'success' state, as 'active' is not a valid state for a deployment status
-      if (latestStatus.state === 'success' && latestStatus.log_url) {
-        // Parse the workflow_run ID from the log_url
-        const runIdMatch = latestStatus.log_url.match(/\/runs\/(\d+)\//);
-        if (runIdMatch && runIdMatch[1]) {
-          activeRunId = parseInt(runIdMatch[1], 10);
-          foundDeploymentUrl = deployment.url;
-          core.info(
-            `DEBUG:   Found SUCCESSFUL deployment status with Workflow Run ID: ${activeRunId}`,
-          );
-          break; // Found the active one, no need to check older deployments
-        } else {
-          core.warning(
-            `DEBUG:   Successful status found for ${deployment.id}, but could not parse run ID from log_url: ${latestStatus.log_url}`,
-          );
-        }
-      }
-    }
-
-    if (!activeRunId) {
-      core.warning(
-        `DEBUG: No ACTIVE deployment found with a parsable workflow run ID. Outputting 'empty'.`,
-      );
-      core.setOutput('download-path', 'empty');
-      return;
-    }
+    // --- NEW LOGIC: Find the last successful workflow run of your main Pages deployment workflow ---
+    // !!! IMPORTANT: Replace 'Your Main Pages Workflow Name' with the actual 'name:' of your production Pages workflow
+    // You can find this name at the top of your main GitHub Pages YAML workflow file (e.g., .github/workflows/main.yml)
+    const mainPagesWorkflowName = 169588973; // <<< REPLACE THIS
 
     core.info(
-      `DEBUG: Identified Active Deployment from URL: ${foundDeploymentUrl}, linked to Workflow Run ID: ${activeRunId}.`,
+      `DEBUG: Searching for the last successful run of workflow '${mainPagesWorkflowName}' on branch 'main'...`,
     );
 
-    // --- Use REST API to list and download artifacts for THIS specific run ---
-    const artifactName = 'github-pages'; // Standard artifact name for Pages builds
+    const {
+      data: { workflow_runs },
+    } = await octokit.rest.actions.listWorkflowRunsForRepo({
+      owner,
+      repo,
+      workflow_id: 169588973,
+      branch: 'main', // Assuming your main site deploys from 'main' branch
+      status: 'success', // Only consider successful runs
+      per_page: 1, // Get only the latest successful one
+    });
+
+    const lastSuccessfulMainRun = workflow_runs[0];
+
+    if (!lastSuccessfulMainRun) {
+      core.warning(
+        `DEBUG: No successful workflow run found for '${mainPagesWorkflowName}' on 'main' branch.`,
+      );
+      core.setOutput('download-path', 'empty');
+      return;
+    }
+
     core.info(
-      `DEBUG: Listing artifacts for workflow run ${activeRunId} to find '${artifactName}'...`,
+      `DEBUG: Found last successful run of main Pages workflow: #${lastSuccessfulMainRun.run_number} (ID: ${lastSuccessfulMainRun.id}).`,
+    );
+    core.info(`DEBUG: Workflow Run URL: ${lastSuccessfulMainRun.html_url}`); // Easier to debug
+
+    // --- Now, list artifacts for THIS specific successful run ---
+    core.info(
+      `DEBUG: Listing artifacts for workflow run ${lastSuccessfulMainRun.id} to find '${artifactName}'...`,
     );
     const {
       data: { artifacts },
     } = await octokit.rest.actions.listWorkflowRunArtifacts({
       owner,
       repo,
-      run_id: activeRunId,
+      run_id: lastSuccessfulMainRun.id,
     });
 
-    core.info(`DEBUG: Found ${artifacts.length} artifacts for run ${activeRunId}.`);
+    core.info(`DEBUG: Found ${artifacts.length} artifacts for run ${lastSuccessfulMainRun.id}.`);
     if (artifacts.length > 0) {
       artifacts.forEach((artifact: any) => {
         core.info(
@@ -117,7 +78,7 @@ async function run() {
 
     if (!pagesArtifact) {
       core.setFailed(
-        `DEBUG: Could not find a '${artifactName}' artifact for workflow run ${activeRunId}.`,
+        `DEBUG: Could not find a '${artifactName}' artifact for workflow run ${lastSuccessfulMainRun.id}. This run likely didn't upload the Pages artifact.`,
       );
       return;
     }
@@ -132,14 +93,13 @@ async function run() {
       archive_format: 'zip',
     });
 
-    core.info(`DEBUG: Downloading artifact from pre-signed URL: ${url}`); // Be careful: URL may contain temp token, GitHub usually masks it.
+    core.info(`DEBUG: Downloading artifact from pre-signed URL.`);
     const downloadPath = 'deployed-site.zip';
     const writer = fs.createWriteStream(downloadPath);
     const response = await axios({ url, method: 'GET', responseType: 'stream' });
     response.data.pipe(writer);
 
     await new Promise<void>((resolve, reject) => {
-      // Added Promise<void> type hint
       writer.on('finish', resolve);
       writer.on('error', reject);
     });
