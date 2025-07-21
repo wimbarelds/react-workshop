@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  build:
+  CI:
     runs-on: ubuntu-latest
 
     steps:
@@ -35,6 +35,3 @@ jobs:
 
       - name: Run TypeScript Check
         run: pnpm tsc
-
-      - name: Run Tests
-        run: pnpm test

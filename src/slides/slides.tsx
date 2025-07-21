@@ -1,181 +1,154 @@
-import type { ReactNode } from 'react';
+import { createAssignment, createSlide, createSlides, createTopic } from 'wb-slides';
 
-import type { BaseSlide, SlideComponent, Slides } from '../types';
 import { Agenda } from './01 Welkom/Agenda';
-import { Goals } from './01 Welkom/Goals';
-import { InScope } from './01 Welkom/InScope';
-import { Welkom } from './01 Welkom/Welkom';
-import { Explanation } from './02 GRWM/Explanation';
-import { Setup } from './02 GRWM/Setup';
-import { Voorbeeld } from './02 GRWM/Voorbeeld';
-import { Arrays } from './03 JsTs/Arrays';
-import { Functions } from './03 JsTs/Functions';
-import { Javascript } from './03 JsTs/Javascript';
-import { Typescript } from './03 JsTs/Typescript';
-import { Componenten } from './04 React/Componenten';
-import { WatIsReact } from './04 React/WatIsReact';
-import { Component } from './05 Componenten/Component';
-import { HelloWorld } from './05 Componenten/HelloWorld';
-import { JSX } from './05 Componenten/JSX';
-import { Children } from './06 Props/Children';
-import { Props } from './06 Props/Props';
-import { TaskList } from './06 Props/TaskList';
-import { HideIfDone } from './07 JS in JSX/HideIfDone';
-import { JsInJSX } from './07 JS in JSX/JsInJsx';
-import { Lists } from './07 JS in JSX/List';
-import { Pizza, PizzaPreview } from './08 Pizza/Pizza';
-import { HuidigeCodeDoorlopen } from './08.5 Recap/HuidigeCodeDoorlopen';
-import { Plan } from './08.5 Recap/Plan';
-import { Recap } from './08.5 Recap/Recap';
-import { StarterProject } from './08.5 Recap/StarterProject';
-import { AddTask } from './09 Hooks/AddTask';
-import { Hooks } from './09 Hooks/Algemeen';
-import { MarkAsDone } from './09 Hooks/MarkAsDone';
-import { ToggleHideDone } from './09 Hooks/ToggleHideDone';
-import { UseState } from './09 Hooks/UseState';
-import { WhatAreEffects } from './09 Hooks/WhatAreEffects';
-import { WhenAllDone } from './09 Hooks/WhenAllDone';
-import { DataLoading } from './10 Fetch/DataLoading';
-import { PrepareDataLoading } from './10 Fetch/Prep';
-import { InstallMui } from './11 Libs/InstallMui';
-import { UsingButton } from './11 Libs/UsingButton';
-import { UsingCard } from './11 Libs/UsingCard';
-import { UsingList } from './11 Libs/UsingList';
-import { WhatLibs } from './11 Libs/WhatLibs';
-import { QnA } from './12 QnA/QnA';
-import { MoreHooks } from './13 Bonus/MoreHooks';
-import { ReactQuery } from './13 Bonus/ReactQuery';
-import { Routing } from './13 Bonus/Routing';
-import { UnderTheHood } from './13 Bonus/UnderTheHood';
+import Goals from './01 Welkom/Goals.mdx';
+import Scope from './01 Welkom/Scope.mdx';
+import Welkom from './01 Welkom/Welkom.mdx';
+import Explanation from './02 GRWM/Explanation.mdx';
+import Setup from './02 GRWM/Setup.mdx';
+import Arrays from './03 JsTs/Arrays.mdx';
+import Functions from './03 JsTs/Functions.mdx';
+import Javascript from './03 JsTs/Javascript.mdx';
+import Typescript from './03 JsTs/Typescript.mdx';
+import Componenten from './04 React/Componenten.mdx';
+import WatIsReact from './04 React/WatIsReact.mdx';
+import Component from './05 Componenten/Component.mdx';
+import HelloWorld from './05 Componenten/HelloWorld.mdx';
+import JSX from './05 Componenten/JSX.mdx';
+import Children from './06 Props/Children.mdx';
+import Props from './06 Props/Props.mdx';
+import TaskList from './06 Props/TaskList.mdx';
+import HideIfDone from './07 JS in JSX/HideIfDone.mdx';
+import JsInJSX from './07 JS in JSX/JsInJsx.mdx';
+import Lists from './07 JS in JSX/List.mdx';
+import HuidigeCodeDoorlopen from './08.5 Recap/HuidigeCodeDoorlopen.mdx';
+import Plan from './08.5 Recap/Plan.mdx';
+import Recap from './08.5 Recap/Recap.mdx';
+import StarterProject from './08.5 Recap/StarterProject.mdx';
+import AddTask from './09 Hooks/AddTask.mdx';
+import Hooks from './09 Hooks/Algemeen.mdx';
+import MarkAsDone from './09 Hooks/MarkAsDone.mdx';
+import ToggleHideDone from './09 Hooks/ToggleHideDone.mdx';
+import UseState from './09 Hooks/UseState.mdx';
+import WhatAreEffects from './09 Hooks/WhatAreEffects.mdx';
+import WhenAllDone from './09 Hooks/WhenAllDone.mdx';
+import DataLoading from './10 Fetch/DataLoading.mdx';
+import PrepareDataLoading from './10 Fetch/Prep.mdx';
+import InstallMui from './11 Libs/InstallMui.mdx';
+import UsingButton from './11 Libs/UsingButton.mdx';
+import UsingCard from './11 Libs/UsingCard.mdx';
+import UsingList from './11 Libs/UsingList.mdx';
+import WhatLibs from './11 Libs/WhatLibs.mdx';
+import QnA from './12 QnA/QnA.mdx';
+import MoreHooks from './13 Bonus/MoreHooks.mdx';
+import ReactQuery from './13 Bonus/ReactQuery.mdx';
+import Routing from './13 Bonus/Routing.mdx';
+import UnderTheHood from './13 Bonus/UnderTheHood.mdx';
 
-export const slides: Slides = [];
-
-const getSlideSlug = (slide: BaseSlide) => {
-  if (typeof slide.preview === 'string') return slide.preview;
-  return slide.view.displayName || slide.view.name;
-};
-
-const addTopic = (title: string, content: BaseSlide | BaseSlide[]) => {
-  if (!Array.isArray(content)) return addTopic(title, [content]);
-
-  const getPath = (slide: BaseSlide) => `/${slugify(title)}/${slugify(getSlideSlug(slide))}`;
-  const mapSlide = (slide: BaseSlide) => ({ ...slide, path: getPath(slide) });
-  const topicSlides = content.map(mapSlide);
-
-  slides.push({ title, slides: topicSlides, path: topicSlides[0].path });
-};
-
-const slide = (preview: ReactNode, duration: number, component: SlideComponent): BaseSlide => ({
-  preview,
-  duration,
-  view: component,
-  type: 'slide',
-});
-
-const assignment = (
-  preview: ReactNode,
-  duration: number,
-  component: SlideComponent,
-): BaseSlide => ({
-  ...slide(preview, duration, component),
-  type: 'assignment',
-});
-
-addTopic('Welkom & Intro', [
-  slide('Welkom', 3, Welkom),
-  slide('Goals', 3, Goals),
-  slide('Agenda', 1, Agenda),
-  slide('Wel/niet in scope', 3, InScope),
+export const slides = createSlides([
+  createTopic({
+    title: 'Welkom & Intro',
+    slides: [
+      createSlide({ title: 'Welkom', component: Welkom }),
+      createSlide({ title: 'Goals', component: Goals }),
+      createSlide({ title: 'Agenda', component: Agenda }),
+      createSlide({ title: 'Wel/niet in scope', component: Scope }),
+    ],
+  }),
+  createTopic({
+    title: 'Get ready with me?',
+    slides: [
+      createAssignment({ title: 'Setup', component: Setup }),
+      createSlide({ title: 'Uitleg bestanden', component: Explanation }),
+    ],
+  }),
+  createTopic({
+    title: 'JavaScript & TypeScript',
+    slides: [
+      createSlide({ title: 'JavaScript', component: Javascript }),
+      createSlide({ title: 'Functies', component: Functions }),
+      createSlide({ title: 'Arrays', component: Arrays }),
+      createSlide({ title: 'TypeScript', component: Typescript }),
+    ],
+  }),
+  createTopic({
+    title: 'Wat is React',
+    slides: [
+      createSlide({ title: 'f(x) = UI', component: WatIsReact }),
+      createSlide({ title: 'Componenten', component: Componenten }),
+    ],
+  }),
+  createTopic({
+    title: 'Componenten & JSX',
+    slides: [
+      createSlide({ title: 'JSX', component: JSX }),
+      createSlide({ title: 'Component', component: Component }),
+      createAssignment({ title: 'Hello World', component: HelloWorld }),
+    ],
+  }),
+  createTopic({
+    title: 'Props & Children',
+    slides: [
+      createSlide({ title: 'Props', component: Props }),
+      createSlide({ title: 'children', component: Children }),
+      createAssignment({ title: 'Statische takenlijst', component: TaskList }),
+    ],
+  }),
+  createTopic({
+    title: 'Javascript in JSX',
+    slides: [
+      createSlide({ title: 'Condities & Lijsten', component: JsInJSX }),
+      createAssignment({ title: 'Lijst renderen', component: Lists }),
+      createAssignment({ title: 'Hide if Done', component: HideIfDone }),
+    ],
+  }),
+  createTopic({
+    title: 'Recap',
+    slides: [
+      createSlide({ title: 'plan voor vandaag', component: Plan }),
+      createSlide({ title: 'Recap', component: Recap }),
+      createSlide({ title: 'Typescript', component: Typescript }),
+      createSlide({ title: 'HuidigeCodeDoorlopen', component: HuidigeCodeDoorlopen }),
+      createAssignment({ title: 'opzetten project', component: StarterProject }),
+    ],
+  }),
+  createTopic({
+    title: 'Hooks',
+    slides: [
+      createSlide({ title: 'Hooks algemeen', component: Hooks }),
+      createSlide({ title: 'useState', component: UseState }),
+      createAssignment({ title: 'Toggle show/hide', component: ToggleHideDone }),
+      createAssignment({ title: 'Nieuwe taak toevoegen', component: AddTask }),
+      createAssignment({ title: 'Zet taak op afgerond', component: MarkAsDone }),
+      createSlide({ title: 'Wat is een effect?', component: WhatAreEffects }),
+      createAssignment({ title: 'Alert als alles afgerond', component: WhenAllDone }),
+    ],
+  }),
+  createTopic({
+    title: 'Data laden',
+    slides: [
+      createSlide({ title: 'Data voorbereiden', component: PrepareDataLoading }),
+      createAssignment({ title: 'Data ophalen met fetch', component: DataLoading }),
+    ],
+  }),
+  createTopic({
+    title: 'Component Library (MUI)',
+    slides: [
+      createSlide({ title: 'Wat zijn component libraries?', component: WhatLibs }),
+      createAssignment({ title: 'Installeer MUI', component: InstallMui }),
+      createAssignment({ title: 'Gebruik Card', component: UsingCard }),
+      createAssignment({ title: 'Gebruik List', component: UsingList }),
+      createAssignment({ title: 'Gebruik Button', component: UsingButton }),
+    ],
+  }),
+  createTopic({ title: 'Q & A', slides: [createSlide({ title: 'Vragen?', component: QnA })] }),
+  createTopic({
+    title: 'Bonus content',
+    slides: [
+      createAssignment({ title: 'More hooks', component: MoreHooks }),
+      createAssignment({ title: 'Routing', component: Routing }),
+      createSlide({ title: 'Under the hood', component: UnderTheHood }),
+      createAssignment({ title: 'React query', component: ReactQuery }),
+    ],
+  }),
 ]);
-
-addTopic('Get ready with me?', [
-  slide('Uitleg & Voorbeeld', 3, Voorbeeld),
-  assignment('Setup', 10, Setup),
-  slide('Uitleg bestanden', 2, Explanation),
-]);
-
-addTopic('JavaScript & TypeScript', [
-  slide('JavaScript', 5, Javascript),
-  slide('Functies', 5, Functions),
-  slide('Arrays', 5, Arrays),
-  slide('TypeScript', 10, Typescript),
-]);
-
-addTopic('Wat is React', [slide('f(x) = UI', 4, WatIsReact), slide('Componenten', 6, Componenten)]);
-
-addTopic('Componenten & JSX', [
-  slide('JSX', 5, JSX),
-  slide('Component', 5, Component),
-  assignment('Hello World', 5, HelloWorld),
-]);
-
-addTopic('Props & Children', [
-  slide('Props', 4, Props),
-  slide('children', 4, Children),
-  assignment('Statische takenlijst', 7, TaskList),
-]);
-
-addTopic('Javascript in JSX', [
-  slide('Condities & Lijsten', 5, JsInJSX),
-  assignment('Lijst renderen', 5, Lists),
-  assignment('Hide if Done', 5, HideIfDone),
-]);
-
-addTopic('Pizza!', [slide(<PizzaPreview />, 40, Pizza)]);
-
-addTopic('Recap', [
-  slide('plan voor vandaag', 10, Plan),
-  slide('Recap', 10, Recap),
-  slide('Typescript', 10, Typescript),
-  slide('HuidigeCodeDoorlopen', 10, HuidigeCodeDoorlopen),
-  assignment('opzetten project', 10, StarterProject),
-]);
-
-addTopic('Hooks', [
-  slide('Hooks algemeen', 3, Hooks),
-  slide('useState', 10, UseState),
-  assignment('Toggle show/hide', 7, ToggleHideDone),
-  assignment('Nieuwe taak toevoegen', 15, AddTask),
-  assignment('Zet taak op afgerond', 15, MarkAsDone),
-  slide('Wat is een effect?', 5, WhatAreEffects),
-  assignment('Alert als alles afgerond', 10, WhenAllDone),
-]);
-
-addTopic('Data laden', [
-  slide('Data voorbereiden', 5, PrepareDataLoading),
-  assignment('Data ophalen met fetch', 10, DataLoading),
-]);
-
-addTopic('Component Library (MUI)', [
-  slide('Wat zijn component libraries?', 5, WhatLibs),
-  assignment('Installeer MUI', 10, InstallMui),
-  assignment('Gebruik Card', 3, UsingCard),
-  assignment('Gebruik List', 5, UsingList),
-  assignment('Gebruik Button', 2, UsingButton),
-]);
-
-addTopic('Q & A', [slide('Vragen?', 10, QnA)]);
-
-addTopic('Bonus content', [
-  assignment('More hooks', 0, MoreHooks),
-  assignment('Routing', 0, Routing),
-  slide('Under the hood', 0, UnderTheHood),
-  assignment('React query', 0, ReactQuery),
-]);
-
-// Change slide 0/0 path to '/'
-slides[0].path = '/';
-slides[0].slides[0].path = '/';
-
-// Helper functie
-function slugify(str: string): string {
-  return str
-    .toString()
-    .normalize('NFD')
-    .replace(/\p{M}/gu, '')
-    .toLowerCase()
-    .trim()
-    .replace(/\s+/g, '-')
-    .replace(/[^\w-]+/g, '')
-    .replace(/--+/g, '-');
-}
