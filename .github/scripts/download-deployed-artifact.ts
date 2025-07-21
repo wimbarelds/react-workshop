@@ -1,43 +1,111 @@
+// .github/scripts/download-deployed-artifact.ts
 import * as core from '@actions/core';
 import * as github from '@actions/github';
 import axios from 'axios';
 import fs from 'fs';
 
-/**
- * Main function to run the script logic.
- */
 async function run() {
+  core.info('Starting download-deployed-artifact.ts script...');
   try {
+    // --- Using core.getInput() for the token, expecting 'github_token' input name ---
     const token = core.getInput('github_token', { required: true });
+    if (!token) {
+      core.setFailed('GitHub token not supplied as input `github_token`.');
+      return;
+    }
+    core.info('DEBUG: GitHub token successfully acquired via core.getInput().');
+
     const octokit = github.getOctokit(token);
     const { owner, repo } = github.context.repo;
-    const pagesEnv = 'github-pages';
+    const pagesEnv = 'github-pages'; // Standard GitHub Pages environment name
+    core.info(`DEBUG: Repository: ${owner}/${repo}, Environment: ${pagesEnv}`);
 
-    core.info(`Finding active deployment for the '${pagesEnv}' environment...`);
-    const { data: deployments } = await octokit.rest.repos.listDeployments({
+    // --- GraphQL Query to find the active deployment and its workflow run ID ---
+    const query = `
+      query GetLatestPagesDeployment($owner: String!, $repo: String!, $environment: String!) {
+        repository(owner: $owner, name: $repo) {
+          deployments(
+            first: 5, # Fetch a few more to debug ordering/state issues if first is not active
+            environments: [$environment],
+            orderBy: {field: CREATED_AT, direction: DESC}
+          ) {
+            nodes {
+              id
+              state # 'ACTIVE', 'IN_PROGRESS', 'PENDING', 'QUEUED', 'ERROR', 'FAILURE'
+              description # Sometimes useful for debugging
+              commit {
+                oid # To confirm which commit it's for
+              }
+              workflowRun { # This links to the workflow run that created this deployment
+                id
+                databaseId # This is the run_id (number) we need for REST API listWorkflowRunArtifacts
+                event # e.g., 'push', 'workflow_dispatch'
+                status # e.g., 'COMPLETED', 'IN_PROGRESS', 'QUEUED'
+                conclusion # e.g., 'SUCCESS', 'FAILURE', 'CANCELLED'
+                url # Direct URL to the workflow run
+              }
+            }
+          }
+        }
+      }
+    `;
+
+    core.info(`DEBUG: Executing GraphQL query to find active deployment...`);
+    const graphqlResponse: any = await octokit.graphql(query, {
       owner,
       repo,
       environment: pagesEnv,
     });
 
-    // Find the latest deployment that was triggered by a workflow run
-    const activeDeployment = deployments.find(
-      (d) => d.payload && typeof d.payload === 'object' && 'workflow_run' in d.payload,
-    );
+    const deploymentNodes = graphqlResponse.repository?.deployments?.nodes;
 
-    if (!activeDeployment) {
-      core.warning(
-        `No active deployment found for '${pagesEnv}'. This may be the first deployment.`,
-      );
-      // Set an output to indicate no file was downloaded.
+    if (!deploymentNodes || deploymentNodes.length === 0) {
+      core.warning(`DEBUG: No deployments found for environment '${pagesEnv}' via GraphQL.`);
       core.setOutput('download-path', 'empty');
       return;
     }
 
-    core.info(`Found active deployment ID: ${activeDeployment.id}`);
-    const run_id = (activeDeployment.payload as { workflow_run: { id: number } }).workflow_run.id;
-    core.info(`Associated Workflow Run ID: ${run_id}`);
+    core.info(`DEBUG: Found ${deploymentNodes.length} deployment nodes.`);
+    deploymentNodes.forEach((node: any, index: number) => {
+      core.info(
+        `DEBUG: Deployment ${index + 1}: ID=${node.id}, State=${node.state}, WorkflowRunLinked=${!!node.workflowRun}`,
+      );
+      if (node.workflowRun) {
+        core.info(
+          `DEBUG:   Run: ID=${node.workflowRun.databaseId}, Event=${node.workflowRun.event}, Status=${node.workflowRun.status}, Conclusion=${node.workflowRun.conclusion}`,
+        );
+      }
+    });
 
+    // Filter for the active deployment, as the query only gives latest by creation, not by active status
+    const activeDeployment = deploymentNodes.find(
+      (node: any) => node.state === 'ACTIVE' && node.workflowRun, // Must be active and linked to a workflow run
+    );
+
+    if (!activeDeployment) {
+      core.warning(
+        `DEBUG: No ACTIVE deployment with a linked workflow run found for '${pagesEnv}'. Outputting 'empty'.`,
+      );
+      core.setOutput('download-path', 'empty');
+      return;
+    }
+
+    const run_id = activeDeployment.workflowRun.databaseId;
+    if (!run_id) {
+      core.setFailed(
+        `DEBUG: Active deployment found (ID: ${activeDeployment.id}), but no workflow run databaseId linked. This should not happen if workflowRun existed.`,
+      );
+      return;
+    }
+
+    core.info(
+      `DEBUG: Identified Active Deployment (ID: ${activeDeployment.id}) from state '${activeDeployment.state}', linked to Workflow Run ID: ${run_id}.`,
+    );
+    core.info(`DEBUG: Workflow Run URL: ${activeDeployment.workflowRun.url}`);
+
+    // --- Use REST API to list and download artifacts for THIS specific run ---
+    const artifactName = 'github-pages'; // Standard artifact name for Pages builds
+    core.info(`DEBUG: Listing artifacts for workflow run ${run_id} to find '${artifactName}'...`);
     const {
       data: { artifacts },
     } = await octokit.rest.actions.listWorkflowRunArtifacts({
@@ -46,13 +114,27 @@ async function run() {
       run_id,
     });
 
-    const pagesArtifact = artifacts.find((a) => a.name === pagesEnv);
+    core.info(`DEBUG: Found ${artifacts.length} artifacts for run ${run_id}.`);
+    if (artifacts.length > 0) {
+      artifacts.forEach((artifact: any) => {
+        core.info(
+          `DEBUG:   Artifact: Name=${artifact.name}, ID=${artifact.id}, Size=${artifact.size_in_bytes}`,
+        );
+      });
+    }
+
+    const pagesArtifact = artifacts.find((a) => a.name === artifactName);
+
     if (!pagesArtifact) {
-      core.setFailed(`Could not find a '${pagesEnv}' artifact for run ${run_id}.`);
+      core.setFailed(
+        `DEBUG: Could not find a '${artifactName}' artifact for workflow run ${run_id}.`,
+      );
       return;
     }
 
-    core.info(`Downloading artifact '${pagesArtifact.name}' (ID: ${pagesArtifact.id})...`);
+    core.info(`DEBUG: Found Pages artifact: Name='${pagesArtifact.name}', ID=${pagesArtifact.id}.`);
+    core.info(`DEBUG: Downloading artifact from pre-signed URL...`);
+
     const { url } = await octokit.rest.actions.downloadArtifact({
       owner,
       repo,
@@ -70,15 +152,16 @@ async function run() {
       writer.on('error', reject);
     });
 
-    core.info(`Successfully downloaded deployed site to ${downloadPath}`);
-    // Set the path of the downloaded file as an output for the next step.
+    core.info(`SUCCESS: Successfully downloaded deployed site to ${downloadPath}`);
     core.setOutput('download-path', downloadPath);
   } catch (error) {
     if (error instanceof Error) {
-      core.setFailed(error.message);
+      core.setFailed(`ERROR: Script failed with: ${error.message}`);
     } else {
-      core.setFailed('An unknown error occurred');
+      core.setFailed(`ERROR: An unknown error occurred: ${JSON.stringify(error)}`);
     }
+  } finally {
+    core.info('Finished download-deployed-artifact.ts script.');
   }
 }
 
