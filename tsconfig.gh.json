@@ -20,6 +20,5 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
-  "include": [".github/scripts/**/*.ts"],
-  "exclude": ["src"]
+  "include": [".github/scripts/**/*.ts"]
 }
