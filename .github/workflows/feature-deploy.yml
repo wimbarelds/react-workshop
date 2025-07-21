@@ -70,7 +70,9 @@ jobs:
 
       - name: 'Download currently deployed site'
         id: download_step # Give the step an ID to access its outputs
-        run: pnpm exec tsx --tsconfig tsconfig.gh.json .github/scripts/download-deployed-artifact.ts
+        run: |
+          echo "DEBUG: INPUT_GITHUB_TOKEN is: '${INPUT_GITHUB_TOKEN}'"
+          pnpm exec tsx --tsconfig tsconfig.gh.json .github/scripts/download-deployed-artifact.ts
         env:
           INPUT_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
