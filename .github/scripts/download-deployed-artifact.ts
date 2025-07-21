@@ -8,7 +8,7 @@ import fs from 'fs';
  */
 async function run() {
   try {
-    const token = core.getInput('github-token', { required: true });
+    const token = core.getInput('github_token', { required: true });
     const octokit = github.getOctokit(token);
     const { owner, repo } = github.context.repo;
     const pagesEnv = 'github-pages';
