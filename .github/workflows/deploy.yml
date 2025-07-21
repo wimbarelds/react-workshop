@@ -4,6 +4,10 @@ on:
   push:
     branches: [main]
 
+concurrency:
+  group: deploy
+  cancel-in-progress: true
+
 permissions:
   contents: read
   pages: write
@@ -12,6 +16,11 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
     strategy:
       matrix:
         node-version: [20]
@@ -40,10 +49,14 @@ jobs:
           pnpm run build --base "/$REPO_NAME/"
           cp dist/index.html dist/404.html
 
+      - name: Zip build artifacts and include in dist
+        run: zip -r dist/files.zip dist
+
       - name: Upload pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: dist
 
       - name: Deploy to GitHub Pages
+        id: deployment
         uses: actions/deploy-pages@v4
