@@ -68,36 +68,48 @@ jobs:
           pnpm run build --base "/$REPO_NAME/pr/$PR_NUMBER/"
           cp dist/index.html dist/404.html
 
-      - name: 'Download currently deployed site'
-        id: download_step # Give the step an ID to access its outputs
-        run: |
-          echo "DEBUG: INPUT_GITHUB_TOKEN is: '${INPUT_GITHUB_TOKEN}'"
-          pnpm exec tsx --tsconfig tsconfig.gh.json .github/scripts/download-deployed-artifact.ts
+      - name: 'Download currently deployed site artifact'
+        id: download_step
+        run: pnpm exec tsx --tsconfig tsconfig.gh.json .github/scripts/download-deployed-artifact.ts
         env:
           INPUT_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 'Combine deployed site with new preview'
         run: |
           PR_NUMBER=${{ github.event.issue.number }}
-          # Access the output set by core.setOutput('download-path', ...)
           DOWNLOAD_PATH="${{ steps.download_step.outputs.download-path }}"
 
-          # Create the deploy directory first
+          echo "DEBUG: Downloaded path from previous step: '$DOWNLOAD_PATH'"
+
           mkdir -p ./deploy
+          echo "Ensured base deploy directory ./deploy exists."
 
           if [[ "$DOWNLOAD_PATH" == "deployed-site.zip" ]]; then
-            echo "Extracting deployed site to ./deploy"
+            echo "Extracting deployed site.zip to ./deploy"
             unzip "$DOWNLOAD_PATH" -d ./deploy
+            
+            if [ -f "./deploy/artifact.tar" ]; then
+              echo "Extracting artifact.tar from ./deploy..."
+              tar -xf ./deploy/artifact.tar -C ./deploy/ # Extract contents of tar into ./deploy
+              rm ./deploy/artifact.tar # Clean up the intermediate tar file
+              echo "Extracted artifact.tar and cleaned up."
+            else
+              echo "Warning: artifact.tar not found inside deployed-site.zip. This may indicate an empty or unexpected artifact structure."
+            fi
           else
-            echo "No existing site to extract. Starting with an empty deploy directory."
+            echo "No existing site (.zip) to extract. Starting with an empty deploy directory."
+            rm -rf ./deploy/*
           fi
 
-          echo "Cleaning up old preview directory (if any): ./deploy/pr/$PR_NUMBER"
-          rm -rf ./deploy/pr/$PR_NUMBER
+          mkdir -p "./deploy/pr/$PR_NUMBER"
+          echo "Ensured preview directory ./deploy/pr/$PR_NUMBER exists."
+
+          find "./deploy/pr/$PR_NUMBER" -mindepth 1 -delete
+          echo "Cleaned up old preview content (if any) in ./deploy/pr/$PR_NUMBER."
 
           echo "Copying new build from ./dist to ./deploy/pr/$PR_NUMBER"
-          cp -rT ./dist ./deploy/pr/$PR_NUMBER
-
+          cp -rT ./dist "./deploy/pr/$PR_NUMBER"
+          echo "Successfully copied new build from ./dist to ./deploy/pr/$PR_NUMBER."
       - name: 'Upload Pages artifact'
         uses: actions/upload-pages-artifact@v3
         with:
