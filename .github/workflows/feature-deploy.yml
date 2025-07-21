@@ -1,0 +1,80 @@
+name: 'Feature deploy'
+
+on:
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+  pull-requests: write
+
+jobs:
+  feature-deploy:
+    # The secure trigger condition we built earlier
+    if: |
+      ${{ github.event.issue.pull_request && github.event.comment.body == 'trigger: deploy' && contains(fromJSON('["OWNER", "MEMBER", "COLLABORATOR"]'), github.event.comment.author_association) }}
+
+    # This creates a dynamic environment for the PR.
+    # The URL will be populated by the output of the deployment step.
+    environment:
+      name: pr-${{ github.event.issue.number }}
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [20]
+
+    steps:
+      - name: 'Acknowledge command with reaction'
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          comment-id: ${{ github.event.comment.id }}
+          reactions: +1
+
+      # This step is still required to get the branch name for checkout
+      - name: 'Get PR branch name'
+        id: get_branch
+        uses: xt0rted/pull-request-comment-branch@v2
+
+      - name: 'Checkout PR branch'
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.get_branch.outputs.head_ref }}
+
+      - name: 'Install pnpm'
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: 'Setup Node.js'
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'pnpm'
+
+      - name: 'Install dependencies'
+        run: pnpm install
+
+      # IMPORTANT: Modified build step for PR previews
+      - name: 'Build for PR Preview'
+        run: |
+          REPO_NAME=$(basename "$GITHUB_REPOSITORY")
+          PR_NUMBER=${{ github.event.issue.number }}
+          # Build with a unique base path for this PR: /<repo-name>/pr/<pr-number>/
+          pnpm run build --base "/$REPO_NAME/pr/$PR_NUMBER/"
+          # Create a 404 page for the preview site
+          cp dist/index.html dist/404.html
+
+      - name: 'Upload Pages artifact'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+      # This step deploys the artifact and outputs the preview URL
+      - name: 'Deploy to GitHub Pages'
+        id: deployment
+        uses: actions/deploy-pages@v4
