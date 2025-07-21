@@ -4,16 +4,15 @@ on:
   issue_comment:
     types: [created]
 
+concurrency:
+  group: pr-preview-${{ github.event.issue.number }}
+  cancel-in-progress: true
+
 permissions:
-  actions: read
   contents: read
   pages: write
   id-token: write
   pull-requests: write
-
-concurrency:
-  group: pr-preview-${{ github.event.issue.number }}
-  cancel-in-progress: true
 
 jobs:
   feature-deploy:
@@ -52,6 +51,28 @@ jobs:
         with:
           version: 10
 
+      - name: Download currently deployed site files
+        run: |
+          REPO_OWNER="${{ github.repository_owner }}"
+          REPO_NAME=$(basename "$GITHUB_REPOSITORY")
+          PR_NUMBER=${{ github.event.issue.number }}
+
+          DOWNLOAD_URL="https://$REPO_OWNER.github.io/$REPO_NAME/files.zip"
+          LOCAL_ZIP_PATH="./files.zip"
+
+          echo "Attempting to download deployed files from: $DOWNLOAD_URL"
+          curl -L -f -o "$LOCAL_ZIP_PATH" "$DOWNLOAD_URL"
+          echo "Downloaded $DOWNLOAD_URL to $LOCAL_ZIP_PATH"
+
+          if file "$LOCAL_ZIP_PATH" | grep -q "Zip archive data"; then
+            unzip "$LOCAL_ZIP_PATH" -d .
+            rm "$LOCAL_ZIP_PATH"
+            echo "Downloaded and unpacked files from previous deployment"
+          else
+            echo "Error: Downloaded file is not a valid zip archive."
+            exit 1
+          fi
+
       - name: 'Setup Node.js'
         uses: actions/setup-node@v4
         with:
@@ -65,55 +86,16 @@ jobs:
         run: |
           REPO_NAME=$(basename "$GITHUB_REPOSITORY")
           PR_NUMBER=${{ github.event.issue.number }}
-          pnpm run build --base "/$REPO_NAME/pr/$PR_NUMBER/"
-          cp dist/index.html dist/404.html
+          pnpm run build --base "/$REPO_NAME/pr/$PR_NUMBER/" --outDir "dist/pr/$PR_NUMBER"
+          cp dist/index.html dist/pr/$PR_NUMBER/404.html
 
-      - name: 'Download currently deployed site artifact'
-        id: download_step
-        run: pnpm exec tsx --tsconfig tsconfig.gh.json .github/scripts/download-deployed-artifact.ts
-        env:
-          INPUT_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Zip build artifacts and include in dist
+        run: zip -r dist/files.zip dist
 
-      - name: 'Combine deployed site with new preview'
-        run: |
-          PR_NUMBER=${{ github.event.issue.number }}
-          DOWNLOAD_PATH="${{ steps.download_step.outputs.download-path }}"
-
-          echo "DEBUG: Downloaded path from previous step: '$DOWNLOAD_PATH'"
-
-          mkdir -p ./deploy
-          echo "Ensured base deploy directory ./deploy exists."
-
-          if [[ "$DOWNLOAD_PATH" == "deployed-site.zip" ]]; then
-            echo "Extracting deployed site.zip to ./deploy"
-            unzip "$DOWNLOAD_PATH" -d ./deploy
-            
-            if [ -f "./deploy/artifact.tar" ]; then
-              echo "Extracting artifact.tar from ./deploy..."
-              tar -xf ./deploy/artifact.tar -C ./deploy/ # Extract contents of tar into ./deploy
-              rm ./deploy/artifact.tar # Clean up the intermediate tar file
-              echo "Extracted artifact.tar and cleaned up."
-            else
-              echo "Warning: artifact.tar not found inside deployed-site.zip. This may indicate an empty or unexpected artifact structure."
-            fi
-          else
-            echo "No existing site (.zip) to extract. Starting with an empty deploy directory."
-            rm -rf ./deploy/*
-          fi
-
-          mkdir -p "./deploy/pr/$PR_NUMBER"
-          echo "Ensured preview directory ./deploy/pr/$PR_NUMBER exists."
-
-          find "./deploy/pr/$PR_NUMBER" -mindepth 1 -delete
-          echo "Cleaned up old preview content (if any) in ./deploy/pr/$PR_NUMBER."
-
-          echo "Copying new build from ./dist to ./deploy/pr/$PR_NUMBER"
-          cp -rT ./dist "./deploy/pr/$PR_NUMBER"
-          echo "Successfully copied new build from ./dist to ./deploy/pr/$PR_NUMBER."
       - name: 'Upload Pages artifact'
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./deploy
+          path: dist
 
       - name: 'Deploy to GitHub Pages'
         id: deployment
