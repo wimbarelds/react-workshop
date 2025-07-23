@@ -27,7 +27,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [20]
+        node-version: [22]
 
     steps:
       - name: 'Acknowledge command with reaction'
