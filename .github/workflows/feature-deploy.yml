@@ -87,7 +87,6 @@ jobs:
           REPO_NAME=$(basename "$GITHUB_REPOSITORY")
           PR_NUMBER=${{ github.event.issue.number }}
           pnpm run build --base "/$REPO_NAME/pr/$PR_NUMBER/" --outDir "dist/pr/$PR_NUMBER"
-          cp dist/index.html dist/pr/$PR_NUMBER/404.html
 
       - name: Zip build artifacts and include in dist
         run: zip -r dist/files.zip dist

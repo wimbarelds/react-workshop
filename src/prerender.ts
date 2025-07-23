@@ -1,8 +1,7 @@
 import { mkdir, readFile, rm, writeFile } from 'fs/promises';
 import { dirname, resolve } from 'path';
 
-const clientPath = resolve(import.meta.dirname, '../dist/client');
-const serverPath = resolve(import.meta.dirname, '../dist/server/entry-server.js');
+const clientPath = resolve(import.meta.dirname, '../dist');
 const htmlPath = resolve(clientPath, 'index.html');
 
 interface ServerEntry {
@@ -10,8 +9,7 @@ interface ServerEntry {
   render: (request: Request) => Promise<string>;
 }
 
-export async function prerender() {
-  const { getRouterPaths, render } = (await import(serverPath)) as ServerEntry;
+export async function prerender({ getRouterPaths, render }: ServerEntry) {
   const paths = getRouterPaths();
   const template = await readFile(htmlPath, { encoding: 'utf-8' });
   await rm(htmlPath);

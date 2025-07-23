@@ -1,7 +1,9 @@
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react-swc';
-import { defineConfig, type UserConfig } from 'vite';
+import { BuildEnvironment, defineConfig, type UserConfig, type ViteBuilder } from 'vite';
 import { vitePluginGhPagesBase, vitePluginMdx, vitePluginMuiIcons } from 'wb-slides/vite';
+
+import { prerender } from './src/prerender';
 
 export default defineConfig(({ command }): UserConfig => {
   const baseConfig: UserConfig = {
@@ -25,42 +27,43 @@ export default defineConfig(({ command }): UserConfig => {
   return {
     ...baseConfig,
     resolve: {
-      alias: [
-        {
-          find: '/src/main.tsx',
-          replacement: '/src/entry-client.tsx',
-        },
-      ],
+      alias: { '/src/main.tsx': '/src/entry-client.tsx' },
     },
     environments: {
       client: {
         consumer: 'client',
-        build: {
-          minify: false,
-          outDir: 'dist/client',
-        },
+        build: { minify: false },
       },
       server: {
         consumer: 'server',
+        resolve: { noExternal: true },
         build: {
           copyPublicDir: false,
-          outDir: 'dist/server',
-          minify: false,
-          rollupOptions: {
-            input: 'src/entry-server.tsx',
-          },
+          write: false,
+          rollupOptions: { input: 'src/entry-server.tsx' },
         },
       },
     },
     builder: {
       buildApp: async (builder) => {
-        const environments = Object.values(builder.environments);
-        await Promise.all(environments.map((env) => builder.build(env)));
+        const [serverEntry] = await Promise.all([
+          buildAndImport(builder, builder.environments.server),
+          builder.build(builder.environments.client),
+        ]);
 
-        import('./src/prerender').then(({ prerender }) => {
-          prerender();
-        });
+        await prerender(serverEntry);
       },
     },
   };
 });
+
+async function buildAndImport(builder: ViteBuilder, env: BuildEnvironment) {
+  const buildResult = await builder.build(env);
+  const rollupOutput = Array.isArray(buildResult) ? buildResult[0] : buildResult;
+  if ('emit' in rollupOutput)
+    throw new Error('Server produced watch output, expected build output');
+
+  const { code } = rollupOutput.output[0];
+  const moduleUri = `data:text/javascript;base64,${Buffer.from(code).toString('base64')}`;
+  return await import(moduleUri);
+}
