@@ -1,6 +1,10 @@
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react-swc';
+import { registerHooks } from 'module';
+import { resolve } from 'path';
+import { argv } from 'process';
 import { BuildEnvironment, defineConfig, type UserConfig, type ViteBuilder } from 'vite';
+import { adapter, analyzer } from 'vite-bundle-analyzer';
 import { vitePluginGhPagesBase, vitePluginMdx, vitePluginMuiIcons } from 'wb-slides/vite';
 
 import { prerender } from './src/prerender';
@@ -27,12 +31,32 @@ export default defineConfig(({ command }): UserConfig => {
   return {
     ...baseConfig,
     resolve: {
-      alias: { '/src/main.tsx': '/src/entry-client.tsx' },
+      alias: {
+        '/src/main.tsx': '/src/entry-client.tsx',
+        'react-router': resolve(
+          import.meta.dirname,
+          'node_modules/react-router/dist/production/index.mjs',
+        ),
+      },
     },
     environments: {
       client: {
         consumer: 'client',
-        build: { minify: false },
+        build: {
+          rollupOptions: {
+            plugins: argv.includes('analyse')
+              ? [
+                  adapter(
+                    analyzer({
+                      enabled: true,
+                      analyzerMode: 'static',
+                      fileName: './dist/stats.html',
+                    }),
+                  ),
+                ]
+              : [],
+          },
+        },
       },
       server: {
         consumer: 'server',
@@ -58,13 +82,28 @@ export default defineConfig(({ command }): UserConfig => {
   };
 });
 
+const virtualModules = new Map<string, string>();
+registerHooks({
+  resolve: (specifier, context, next) => {
+    if (!specifier.startsWith('ssg:')) return next(specifier, context);
+    return { url: specifier, format: 'module', shortCircuit: true };
+  },
+  load: (url, context, next) => {
+    if (!url.startsWith('ssg:')) return next(url, context);
+    const source = virtualModules.get(url);
+    if (!source) return next(url, context);
+    return { source, format: 'module', shortCircuit: true };
+  },
+});
+
 async function buildAndImport(builder: ViteBuilder, env: BuildEnvironment) {
+  const virtualServerPath = 'ssg:server/index.js';
   const buildResult = await builder.build(env);
   const rollupOutput = Array.isArray(buildResult) ? buildResult[0] : buildResult;
   if ('emit' in rollupOutput)
     throw new Error('Server produced watch output, expected build output');
 
-  const { code } = rollupOutput.output[0];
-  const moduleUri = `data:text/javascript;base64,${Buffer.from(code).toString('base64')}`;
-  return await import(moduleUri);
+  virtualModules.set(virtualServerPath, rollupOutput.output[0].code);
+
+  return await import(virtualServerPath);
 }
