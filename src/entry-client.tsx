@@ -1,7 +1,7 @@
 import './index.css';
 
 import { StrictMode } from 'react';
-import { createRoot } from 'react-dom/client';
+import { hydrateRoot } from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router';
 import { SlidesProvider } from 'wb-slides';
 
@@ -11,7 +11,8 @@ import { slides } from './slides/slides';
 const basename = new URL(document.baseURI).pathname || undefined;
 const router = createBrowserRouter(routes, { basename });
 
-createRoot(document.querySelector('#app')!).render(
+hydrateRoot(
+  document.querySelector('#app')!,
   <StrictMode>
     <SlidesProvider slides={slides}>
       <RouterProvider router={router} />
