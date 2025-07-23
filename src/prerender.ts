@@ -1,15 +1,15 @@
 import { mkdir, readFile, rm, writeFile } from 'fs/promises';
 import { dirname, resolve } from 'path';
 
-const clientPath = resolve(import.meta.dirname, '../dist');
-const htmlPath = resolve(clientPath, 'index.html');
-
 interface ServerEntry {
   getRouterPaths: () => string[];
   render: (request: Request) => Promise<string>;
 }
 
-export async function prerender({ getRouterPaths, render }: ServerEntry) {
+export async function prerender({ getRouterPaths, render }: ServerEntry, outDir = 'dist') {
+  const clientPath = resolve(import.meta.dirname, '..', outDir);
+  const htmlPath = resolve(clientPath, 'index.html');
+
   const paths = getRouterPaths();
   const template = await readFile(htmlPath, { encoding: 'utf-8' });
   await rm(htmlPath);

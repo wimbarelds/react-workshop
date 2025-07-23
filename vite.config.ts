@@ -51,7 +51,8 @@ export default defineConfig(({ command }): UserConfig => {
           builder.build(builder.environments.client),
         ]);
 
-        await prerender(serverEntry);
+        const outDir = builder.environments.client.config.build.outDir;
+        await prerender(serverEntry, outDir);
       },
     },
   };
