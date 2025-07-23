@@ -17,12 +17,8 @@ export default defineConfig(({ command }): UserConfig => {
       tailwindcss(),
       vitePluginGhPagesBase(),
       vitePluginMuiIcons(
-        'chevron_right',
-        'chevron_left',
-        'stat_1',
-        'stat_minus_1',
-        'more_horiz',
-        'construction',
+        ['chevron_right', 'chevron_left', 'stat_1', 'stat_minus_1', 'more_horiz', 'construction'],
+        { inline: 'full' },
       ),
     ],
   };
@@ -44,6 +40,7 @@ export default defineConfig(({ command }): UserConfig => {
         consumer: 'client',
         build: {
           rollupOptions: {
+            treeshake: 'smallest',
             plugins: argv.includes('analyse')
               ? [
                   adapter(
