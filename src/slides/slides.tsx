@@ -134,7 +134,7 @@ export const slides = createSlides([
   createTopic({
     title: 'Component Library (MUI)',
     slides: [
-      createSlide({ title: 'Wat zijn component libraries?', component: WhatLibs }),
+      createSlide({ title: 'Component libraries', component: WhatLibs }),
       createAssignment({ title: 'Installeer MUI', component: InstallMui }),
       createAssignment({ title: 'Gebruik Card', component: UsingCard }),
       createAssignment({ title: 'Gebruik List', component: UsingList }),

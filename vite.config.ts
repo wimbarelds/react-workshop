@@ -1,16 +1,18 @@
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react-swc';
-import { registerHooks } from 'module';
-import { resolve } from 'path';
-import { argv } from 'process';
-import { BuildEnvironment, defineConfig, type UserConfig, type ViteBuilder } from 'vite';
-import { adapter, analyzer } from 'vite-bundle-analyzer';
-import { vitePluginGhPagesBase, vitePluginMdx, vitePluginMuiIcons } from 'wb-slides/vite';
+import { defineConfig, type UserConfig, type ViteBuilder } from 'vite';
+import {
+  virtualImport,
+  vitePluginDeferScript,
+  vitePluginGhPagesBase,
+  vitePluginMdx,
+  vitePluginMuiIcons,
+} from 'wb-slides/vite';
 
 import { prerender } from './src/prerender';
 
 export default defineConfig(({ command }): UserConfig => {
-  const baseConfig: UserConfig = {
+  const baseConfig = {
     plugins: [
       vitePluginMdx(),
       react(),
@@ -20,56 +22,35 @@ export default defineConfig(({ command }): UserConfig => {
         ['chevron_right', 'chevron_left', 'stat_1', 'stat_minus_1', 'more_horiz', 'construction'],
         { inline: 'full' },
       ),
+      vitePluginDeferScript(),
     ],
-  };
+  } satisfies UserConfig;
   if (command !== 'build') return baseConfig;
 
   return {
     ...baseConfig,
     resolve: {
-      alias: {
-        '/src/main.tsx': '/src/entry-client.tsx',
-        'react-router': resolve(
-          import.meta.dirname,
-          'node_modules/react-router/dist/production/index.mjs',
-        ),
-      },
+      alias: { '/src/main.tsx': '/src/entry-client.tsx' },
     },
     environments: {
       client: {
         consumer: 'client',
-        build: {
-          rollupOptions: {
-            treeshake: 'smallest',
-            plugins: argv.includes('analyse')
-              ? [
-                  adapter(
-                    analyzer({
-                      enabled: true,
-                      analyzerMode: 'static',
-                      fileName: './dist/stats.html',
-                    }),
-                  ),
-                ]
-              : [],
-          },
-        },
+        build: { rollupOptions: { treeshake: 'smallest' } },
       },
       server: {
         consumer: 'server',
-        resolve: { noExternal: true },
         build: {
-          copyPublicDir: false,
           write: false,
+          copyPublicDir: false,
           rollupOptions: { input: 'src/entry-server.tsx' },
         },
       },
     },
     builder: {
       buildApp: async (builder) => {
-        const [serverEntry] = await Promise.all([
-          buildAndImport(builder, builder.environments.server),
+        const [, serverEntry] = await Promise.all([
           builder.build(builder.environments.client),
+          builder.build(builder.environments.server).then(importBuildOutput),
         ]);
 
         const outDir = builder.environments.client.config.build.outDir;
@@ -79,28 +60,9 @@ export default defineConfig(({ command }): UserConfig => {
   };
 });
 
-const virtualModules = new Map<string, string>();
-registerHooks({
-  resolve: (specifier, context, next) => {
-    if (!specifier.startsWith('ssg:')) return next(specifier, context);
-    return { url: specifier, format: 'module', shortCircuit: true };
-  },
-  load: (url, context, next) => {
-    if (!url.startsWith('ssg:')) return next(url, context);
-    const source = virtualModules.get(url);
-    if (!source) return next(url, context);
-    return { source, format: 'module', shortCircuit: true };
-  },
-});
-
-async function buildAndImport(builder: ViteBuilder, env: BuildEnvironment) {
-  const virtualServerPath = 'ssg:server/index.js';
-  const buildResult = await builder.build(env);
+type BuildOutput = Awaited<ReturnType<ViteBuilder['build']>>;
+async function importBuildOutput(buildResult: BuildOutput) {
   const rollupOutput = Array.isArray(buildResult) ? buildResult[0] : buildResult;
-  if ('emit' in rollupOutput)
-    throw new Error('Server produced watch output, expected build output');
-
-  virtualModules.set(virtualServerPath, rollupOutput.output[0].code);
-
-  return await import(virtualServerPath);
+  if ('emit' in rollupOutput) throw new Error('Received RollupWatcher, expected RollupOutput');
+  return await virtualImport(rollupOutput.output[0].code);
 }
