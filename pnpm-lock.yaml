@@ -30,8 +30,8 @@ importers:
         specifier: 4.1.11
         version: 4.1.11
       wb-slides:
-        specifier: 0.1.9
-        version: 0.1.9(@mdx-js/react@3.1.0(@types/react@19.1.8)(react@19.1.0))(@mdx-js/rollup@3.1.0(acorn@8.15.0)(rollup@4.45.1))(clsx@2.1.1)(node-fetch@3.3.2)(react-dom@19.1.0(react@19.1.0))(react-router@7.7.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-syntax-highlighter@15.6.1(react@19.1.0))(react@19.1.0)
+        specifier: 0.1.10
+        version: 0.1.10(@mdx-js/react@3.1.0(@types/react@19.1.8)(react@19.1.0))(@mdx-js/rollup@3.1.0(acorn@8.15.0)(rollup@4.45.1))(clsx@2.1.1)(node-fetch@3.3.2)(react-dom@19.1.0(react@19.1.0))(react-router@7.7.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-syntax-highlighter@15.6.1(react@19.1.0))(react@19.1.0)
     devDependencies:
       '@eslint/js':
         specifier: 9.31.0
@@ -2281,8 +2281,8 @@ packages:
       yaml:
         optional: true
 
-  wb-slides@0.1.9:
-    resolution: {integrity: sha512-ArYc+M9lQhZ5LnbbFyoW1vgi279fgDCUU+Mzro4tip6aAErSE7DtbZAetaWhosOBO7/oGO8Rhc0B/xA200Bnvg==}
+  wb-slides@0.1.10:
+    resolution: {integrity: sha512-teqs4FAfqtByf9VhiQoxwJg4hlsdijbUcsJ7v3u2kSWxgrom9yQ2fNih4legUyxWPL8bQAvJsLYE7if9OrsRZQ==}
     peerDependencies:
       '@mdx-js/react': ^3.1.0
       '@mdx-js/rollup': ^3.1.0
@@ -4906,7 +4906,7 @@ snapshots:
       jiti: 2.4.2
       lightningcss: 1.30.1
 
-  wb-slides@0.1.9(@mdx-js/react@3.1.0(@types/react@19.1.8)(react@19.1.0))(@mdx-js/rollup@3.1.0(acorn@8.15.0)(rollup@4.45.1))(clsx@2.1.1)(node-fetch@3.3.2)(react-dom@19.1.0(react@19.1.0))(react-router@7.7.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-syntax-highlighter@15.6.1(react@19.1.0))(react@19.1.0):
+  wb-slides@0.1.10(@mdx-js/react@3.1.0(@types/react@19.1.8)(react@19.1.0))(@mdx-js/rollup@3.1.0(acorn@8.15.0)(rollup@4.45.1))(clsx@2.1.1)(node-fetch@3.3.2)(react-dom@19.1.0(react@19.1.0))(react-router@7.7.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-syntax-highlighter@15.6.1(react@19.1.0))(react@19.1.0):
     dependencies:
       '@mdx-js/react': 3.1.0(@types/react@19.1.8)(react@19.1.0)
       '@mdx-js/rollup': 3.1.0(acorn@8.15.0)(rollup@4.45.1)
