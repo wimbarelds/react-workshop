@@ -2,6 +2,9 @@
 @plugin "@tailwindcss/typography";
 @source '../node_modules/wb-slides';
 
+@import '@wooorm/starry-night/style/core';
+@import '@wooorm/starry-night/style/dark';
+
 @custom-variant dark (&:where(.dark, .dark *));
 
 @layer base {

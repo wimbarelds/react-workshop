@@ -1,8 +1,0 @@
-# Under the hood
-
-Hoe werkt React onder de motorkap?
-
-- Reminder: Componenten zijn functies
-- Elke keer dat er een stukje state in een component verandert, dan wordt dat component, en alle sub-componenten, opnieuw gerenderd (dan worden dus alle functies opnieuw uitgevoerd)
-- React zorgt dat hooks 'weten' in welk component ze zijn uitgevoerd, en kunnen daarom hun "state" onthouden.
-- De functie die je meegeeft aan o.a. useEffect wordt gecached op basis van de dependency array. Dat betekent dat, als je een stukje state update dat niet in de dependency array staat, het effect mogelijk nog een verouderde waarde voor dat stukje state heeft.

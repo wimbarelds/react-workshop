@@ -1,0 +1,66 @@
+# Opdracht: Lokale Setup
+
+In deze opdracht ga je je lokale omgeving klaarzetten voor het werken met Pega React.
+
+## Pega
+
+1. **Pega Account**
+   - Ga naar [https://dev.rulesmatter.nl/prweb](https://dev.rulesmatter.nl/prweb)
+   - Log in met je `eigen operator`.
+
+     _Indien je nog geen eigen account hebt, gebruik dan het volgende account om in loggen en een eigen account te maken:_
+
+     ```
+     username: cursus.template@soprasteria.com
+     password: <via Slack>
+     ```
+
+2. **Applicatie**
+   - Open de `OnboardingTemplate` application
+   - Kies **SaveAs** en geef de naam `Onboarding<Naam>` (mag gewoon in de `OnboardingTemplate` ruleset)
+   - Pas de URL Alias aan naar `Onboarding<Naam>`
+   - Voeg een eigen development ruleset toe met als naam `Onboarding<Naam>:01-01`
+   - Verwijder de `OnboardingTemplate:01-01` ruleset
+   - Klik op **Save**
+
+3. **Access Group**
+   - Open de `OnboardingTemplate:Administrators` AccessGroup
+   - Kies **Save as**: `Onboarding<UserName>:Administrators`
+   - Pas de **ApplicationName** aan naar `Onboarding<Naam>` en klik op **Save**
+   - Wijzig de **Application Name** naar `Onboarding<Naam>` en klik op **Save**
+     >
+   - Open je eigen Operator, voeg de nieuwe AccessGroup toe
+   - Markeer de nieuwe AccessGroup als default en klik op **Save**
+   - Switch naar de `Onboarding<Naam>` application
+
+> Sla vanaf hier zo veel mogelijk alle rules op in je eigen ruleset
+
+4. **OAuth Registration**
+   - Ga naar: `Records` -> `Security` -> `OAuth 2.0 Client Registration`
+   - Kopieer `cursusTemplate` naar `ReactSDK<Naam>`
+   - Klik op **View & Download**
+   - Wijzig de `OperatorID` naar je eigen operator
+   - Klik op **Save**
+
+## Lokaal
+
+1. **Configuratie**
+   - Kopieer `.env.local.example` naar `.env.local`
+   - Vervang `CLIENT_ID` en `CLIENT_SECRET` met de juiste waarden uit de download
+
+2. **Uitvoeren**
+   - Voer uit in de terminal:
+
+     _Alleen de eerste keer:_
+
+     ```sh
+     yarn
+     ```
+
+     Om de applicatie lokaal te starten:
+
+     ```sh
+     yarn app onboarding devauth
+     ```
+
+> Voltooi alle stappen voordat je aan de volgende opdrachten begint.
